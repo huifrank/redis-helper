@@ -9,9 +9,15 @@ import lombok.Data;
 @Data
 public class BankCard {
 
+    /**
+     * bankCard:id
+     */
     @ClusterIndex
     private Long id;
 
+    /**
+     * bankCard:cardNo
+     */
     @Indexed
     private String cardNo;
 

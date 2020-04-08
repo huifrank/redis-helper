@@ -24,6 +24,7 @@ public class BankCardDalImpl implements BankCardDal {
     @CacheFor(bufferEntity = BankCard.class)
     @Override
     public int updateByCardNoAndType(@Field("cardNo") String cardNo,@Field("cardType") String type){
+        //索引列表 ,入参属性 group
 
         return 0;
     }

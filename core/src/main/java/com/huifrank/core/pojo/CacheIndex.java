@@ -12,7 +12,9 @@ public class CacheIndex {
 
     CacheIndexType indexType;
 
+    /** 属性名 */
     String name;
+
 
 
 }

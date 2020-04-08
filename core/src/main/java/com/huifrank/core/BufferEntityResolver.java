@@ -26,8 +26,8 @@ public class BufferEntityResolver {
 
     private List<CacheIndex> resolverEntityField(Field field){
         List<CacheIndex> fieldCache = new ArrayList<>();
-        Annotation clusterIndex = field.getAnnotation(ClusterIndex.class);
-        Annotation indexed = field.getAnnotation(Indexed.class);
+        ClusterIndex clusterIndex = field.getAnnotation(ClusterIndex.class);
+        Indexed indexed = field.getAnnotation(Indexed.class);
 
         if(clusterIndex != null) {
             fieldCache.add(new CacheIndex(CacheIndexType.ClusterIndex ,field.getName()));
