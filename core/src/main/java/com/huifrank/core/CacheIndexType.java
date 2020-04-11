@@ -6,5 +6,5 @@ public enum CacheIndexType {
     ClusterIndex,
 
     /**普通索引*/
-    index,
+    NormalIndex,
 }

@@ -1,4 +1,4 @@
-package com.huifrank.core;
+package com.huifrank.core.resolver;
 
 import com.huifrank.annotation.Field;
 import com.huifrank.core.pojo.CacheIndex;
@@ -12,15 +12,15 @@ import java.util.stream.IntStream;
 public class ParamsResolver {
 
 
-    public List<ParamMap> resolverParameters(Parameter[] parameters) {
+    public List<ParamMap> resolverParameters(Parameter[] parameters,Object[] args) {
 
         return IntStream.range(0,parameters.length).mapToObj(index ->{
             Parameter p = parameters[index];
             Field annotation = p.getAnnotation(Field.class);
             if(annotation == null){
-                return new ParamMap(p.getName(),index);
+                return new ParamMap(p.getName(),index,args[index],p.getType().getTypeName());
             }
-            return new ParamMap(annotation.value(),index);
+            return new ParamMap(annotation.value(),index,args[index],p.getType().getTypeName());
 
         } ).collect(Collectors.toList());
     }

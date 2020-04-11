@@ -13,4 +13,8 @@ public interface BankCardDal {
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
     int updateByCardNoAndType(@Field("cardNo") String cardNo, @Field("cardType") String type);
+
+    @Evict
+    @CacheFor(bufferEntity = BankCard.class)
+    int updateByCardNoAndMobile(@Field("cardNo") String cardNo, String mobile);
 }

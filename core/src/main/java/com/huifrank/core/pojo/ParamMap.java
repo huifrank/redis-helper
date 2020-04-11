@@ -7,8 +7,14 @@ import lombok.Data;
 @Data
 public class ParamMap {
 
-    String name;
+    private String name;
 
-    int index;
+    private int index;
+
+    private Object value;
+
+    private String valueTypeName;
+
+
 
 }

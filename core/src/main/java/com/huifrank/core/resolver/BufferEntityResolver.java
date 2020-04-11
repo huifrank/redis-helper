@@ -1,7 +1,8 @@
-package com.huifrank.core;
+package com.huifrank.core.resolver;
 
 import com.huifrank.annotation.index.ClusterIndex;
 import com.huifrank.annotation.index.Indexed;
+import com.huifrank.core.CacheIndexType;
 import com.huifrank.core.pojo.CacheIndex;
 
 import java.lang.annotation.Annotation;
@@ -33,7 +34,7 @@ public class BufferEntityResolver {
             fieldCache.add(new CacheIndex(CacheIndexType.ClusterIndex ,field.getName()));
         }
         if(indexed != null) {
-            fieldCache.add(new CacheIndex(CacheIndexType.index ,field.getName()));
+            fieldCache.add(new CacheIndex(CacheIndexType.NormalIndex ,field.getName()));
         }
         return fieldCache;
     }

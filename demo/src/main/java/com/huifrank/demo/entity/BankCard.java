@@ -26,5 +26,6 @@ public class BankCard {
     private String cardType;
 
 
+    @Indexed
     private String mobile;
 }

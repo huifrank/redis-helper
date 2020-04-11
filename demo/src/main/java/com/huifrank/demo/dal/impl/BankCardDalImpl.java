@@ -29,4 +29,13 @@ public class BankCardDalImpl implements BankCardDal {
         return 0;
     }
 
+    @Evict
+    @CacheFor(bufferEntity = BankCard.class)
+    @Override
+    public int updateByCardNoAndMobile(@Field("cardNo") String cardNo,String mobile){
+        //索引列表 ,入参属性 group
+
+        return 0;
+    }
+
 }

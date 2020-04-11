@@ -1,6 +1,6 @@
 package com.huifrank.demo.evict;
 
-import com.huifrank.core.action.EvictResolver;
+import com.huifrank.core.action.EvictAction;
 import com.huifrank.demo.RedisHelperDemoRunner;
 import com.huifrank.demo.dal.BankCardDal;
 import org.junit.jupiter.api.Test;
@@ -17,8 +17,6 @@ public class EvictAopTest {
     @Autowired
     BankCardDal bankCardDal;
 
-    @Autowired
-    EvictResolver evictResolver;
 
 
 
@@ -26,6 +24,11 @@ public class EvictAopTest {
     public void testEvict(){
 
         bankCardDal.updateByCardNoAndType("a","D");
+    }
+    @Test
+    public void testEvictMobile(){
+
+        bankCardDal.updateByCardNoAndMobile("a","13223422312");
     }
 
 
