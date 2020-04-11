@@ -32,9 +32,23 @@ public class BankCardDalImpl implements BankCardDal {
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
     @Override
-    public int updateByCardNoAndMobile(@Field("cardNo") String cardNo,String mobile){
+    public int updateByCardNoAndMobile(@Field("cardNo") String cardNo, String mobile){
         //索引列表 ,入参属性 group
 
+        return 0;
+    }
+
+    @Evict
+    @CacheFor(bufferEntity = BankCard.class)
+    @Override
+    public int updateById(String id, String mobile) {
+        return 0;
+    }
+
+    @Evict
+    @CacheFor(bufferEntity = BankCard.class)
+    @Override
+    public int updateById(String id) {
         return 0;
     }
 

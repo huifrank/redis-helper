@@ -31,6 +31,17 @@ public class EvictAopTest {
         bankCardDal.updateByCardNoAndMobile("a","13223422312");
     }
 
+    @Test
+    public void testEvictId(){
+
+        bankCardDal.updateById("a","13223422312");
+    }
+    @Test
+    public void testEvictIdOnly(){
+
+        bankCardDal.updateById("a");
+    }
+
 
 
 }

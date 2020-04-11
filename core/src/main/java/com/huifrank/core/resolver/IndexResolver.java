@@ -7,10 +7,7 @@ import com.huifrank.core.typeHandler.TypeHandler;
 import com.huifrank.core.typeHandler.impl.StringTypeHandler;
 import org.springframework.boot.autoconfigure.cache.CacheType;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,24 +23,34 @@ public class IndexResolver {
 
 
     public List<String> resolverAllIndex(List<ParamMap> paramMaps, Map<String, CacheIndex> indexMap,String prefix){
-        //建立有对应索引的参数(目前还未考虑覆盖索引)
-        List<ParamMap> needClear = paramMaps.stream()
-                .filter(f -> indexMap.containsKey(f.getName()))
+
+        List<ParamMap> normal = paramMaps.stream()
+                .filter(f -> indexMap.containsKey(f.getName())
+                        && CacheIndexType.NormalIndex.equals(indexMap.get(f.getName()).getIndexType()))
                 .collect(Collectors.toList());
 
+        List<ParamMap> cluster = paramMaps.stream()
+                .filter(f -> indexMap.containsKey(f.getName())
+                        && CacheIndexType.ClusterIndex.equals(indexMap.get(f.getName()).getIndexType()))
+                .collect(Collectors.toList());
 
-        List<CacheIndex> cluster = indexMap.entrySet().stream()
+        List<CacheIndex> clusterType = indexMap.entrySet().stream()
                 .filter(p -> CacheIndexType.ClusterIndex.equals(p.getValue().getIndexType()))
                 .map(p -> p.getValue()).collect(Collectors.toList());
 
         if(cluster.size() > 1 ){
             throw new RuntimeException("目前一个类仅支持设置一个聚簇索引");
         }
-        List<String> keys = paramMaps.stream().map(p -> normalIndex(prefix, cluster.get(0), p)).collect(Collectors.toList());
+        List<String> byNormalKeys = normal.stream().map(p -> normalIndex(prefix, clusterType.get(0), p)).collect(Collectors.toList());
+
+        List<String> byClusterKeys = cluster.stream().map(p -> clusterIndex(prefix, clusterType.get(0), p)).collect(Collectors.toList());
 
 
+        List<String> res = new ArrayList<>(byNormalKeys.size()+byClusterKeys.size());
+        res.addAll(byClusterKeys);
+        res.addAll(byNormalKeys);
 
-        return keys;
+        return res;
     }
 
     private String normalIndex( String prefix,CacheIndex clusterIndex,ParamMap curParam){
@@ -52,7 +59,12 @@ public class IndexResolver {
         String cluster =prefix+  CACHE_SPLIT+clusterIndex.getName()+CACHE_SPLIT+"("+normal+")";
 
         return cluster;
+    }
 
+    private String clusterIndex( String prefix,CacheIndex clusterIndex,ParamMap curParam){
 
+        String cluster =prefix+ CACHE_SPLIT+clusterIndex.getName()+CACHE_SPLIT+curParam.getValue();
+
+        return cluster;
     }
 }
