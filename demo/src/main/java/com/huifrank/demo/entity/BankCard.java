@@ -15,6 +15,9 @@ public class BankCard {
     @ClusterIndex
     private Long id;
 
+    @ClusterIndex
+    private String indexCardId;
+
     /**
      * bankCard:cardNo
      */
@@ -25,7 +28,9 @@ public class BankCard {
 
     private String cardType;
 
+    private String name;
 
-    @Indexed(ref ="id")
+
+    @Indexed(ref ="indexCardId")
     private String mobile;
 }

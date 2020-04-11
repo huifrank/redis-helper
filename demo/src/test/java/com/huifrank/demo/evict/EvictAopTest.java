@@ -34,7 +34,7 @@ public class EvictAopTest {
     @Test
     public void testEvictId(){
 
-        bankCardDal.updateById("a","13223422312");
+        bankCardDal.updateById("1","13223422312");
     }
     @Test
     public void testEvictIdOnly(){
@@ -42,6 +42,17 @@ public class EvictAopTest {
         bankCardDal.updateById("a");
     }
 
+    @Test
+    public void testEvictIdAndName(){
+
+        bankCardDal.updateByIdAndName("id","name");
+    }
+
+    @Test
+    public void testEvictMobileAndCardNo(){
+
+        bankCardDal.updateByMobileAndCardNo("cardNo","mobile");
+    }
 
 
 }

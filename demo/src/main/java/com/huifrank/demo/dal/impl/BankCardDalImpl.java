@@ -52,4 +52,17 @@ public class BankCardDalImpl implements BankCardDal {
         return 0;
     }
 
+    @Evict
+    @CacheFor(bufferEntity = BankCard.class)
+    @Override
+    public int updateByIdAndName(String id, String name) {
+        return 0;
+    }
+    @Evict
+    @CacheFor(bufferEntity = BankCard.class)
+    @Override
+    public int updateByMobileAndCardNo(String cardNo,String mobile) {
+        return 0;
+    }
+
 }

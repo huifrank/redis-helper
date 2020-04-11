@@ -5,6 +5,7 @@ import com.huifrank.annotation.BufferEntity;
 import com.huifrank.annotation.CacheFor;
 import com.huifrank.core.executor.DeleteOpsExe;
 import com.huifrank.core.executor.ops.DelOps;
+import com.huifrank.core.pojo.Expression;
 import com.huifrank.core.resolver.BufferEntityResolver;
 import com.huifrank.core.resolver.IndexResolver;
 import com.huifrank.core.resolver.ParamsResolver;
@@ -63,14 +64,14 @@ public class EvictAction {
                 .collect(Collectors.toMap(CacheIndex::getName, Function.identity()));
 
 
-        List<String> collect = indexResolver.resolverAllIndex(paramMaps, indexMap, prefix);
+        List<Expression> collect = indexResolver.resolverAllIndex(paramMaps, indexMap, prefix);
 
 
         //执行原方法
         Object proceed = joinPoint.proceed();
 
         //提交删除任务
-        List<DelOps> opsList = collect.stream().map(DelOps::new).collect(Collectors.toList());
+        List<DelOps> opsList = collect.stream().map(o-> new DelOps(o.toString())).collect(Collectors.toList());
         deleteOpsExe.execute(opsList);
 
 
