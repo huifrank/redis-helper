@@ -31,10 +31,9 @@ public class BufferEntityResolver {
         Indexed indexed = field.getAnnotation(Indexed.class);
 
         if(clusterIndex != null) {
-            fieldCache.add(new CacheIndex(CacheIndexType.ClusterIndex ,field.getName()));
-        }
-        if(indexed != null) {
-            fieldCache.add(new CacheIndex(CacheIndexType.NormalIndex ,field.getName()));
+            fieldCache.add(new CacheIndex(CacheIndexType.ClusterIndex ,field.getName(),null));
+        } else if(indexed != null) {
+            fieldCache.add(new CacheIndex(CacheIndexType.NormalIndex ,field.getName(),indexed.ref()));
         }
         return fieldCache;
     }

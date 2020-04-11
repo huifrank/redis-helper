@@ -18,7 +18,7 @@ public class BankCard {
     /**
      * bankCard:cardNo
      */
-    @Indexed
+    @Indexed(ref = "id")
     private String cardNo;
 
     private String bankName;
@@ -26,6 +26,6 @@ public class BankCard {
     private String cardType;
 
 
-    @Indexed
+    @Indexed(ref ="id")
     private String mobile;
 }

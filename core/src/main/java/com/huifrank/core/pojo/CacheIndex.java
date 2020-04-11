@@ -15,6 +15,9 @@ public class CacheIndex {
     /** 属性名 */
     String name;
 
+    /** 仅普通索引有值 表示其关联的聚簇索引*/
+    String refIndex;
+
 
 
 }
