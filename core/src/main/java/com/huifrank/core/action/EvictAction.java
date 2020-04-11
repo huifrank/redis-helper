@@ -3,13 +3,13 @@ package com.huifrank.core.action;
 
 import com.huifrank.annotation.BufferEntity;
 import com.huifrank.annotation.CacheFor;
+import com.huifrank.core.executor.DeleteOpsExe;
+import com.huifrank.core.executor.ops.DelOps;
 import com.huifrank.core.resolver.BufferEntityResolver;
 import com.huifrank.core.resolver.IndexResolver;
 import com.huifrank.core.resolver.ParamsResolver;
 import com.huifrank.core.pojo.CacheIndex;
 import com.huifrank.core.pojo.ParamMap;
-import com.huifrank.core.typeHandler.TypeHandler;
-import com.huifrank.core.typeHandler.impl.StringTypeHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -18,7 +18,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Parameter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -36,13 +35,8 @@ public class EvictAction {
 
     IndexResolver indexResolver = new IndexResolver();
 
-    static Map<String, TypeHandler> typeHandlers;
-    static {
-        typeHandlers = new HashMap<>();
-        typeHandlers.put("java.lang.String",new StringTypeHandler());
-    }
+    DeleteOpsExe deleteOpsExe = new DeleteOpsExe();
 
-    private static String CACHE_SPLIT =":";
 
     @Around(value = "@annotation(com.huifrank.annotation.action.Evict)")
     public Object doEvictAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -66,7 +60,7 @@ public class EvictAction {
         List<ParamMap> paramMaps = paramsResolver.resolverParameters(parameters,joinPoint.getArgs());
 
         Map<String, CacheIndex> indexMap = cacheIndices.stream()
-                .collect(Collectors.toMap(f -> f.getName(), Function.identity()));
+                .collect(Collectors.toMap(CacheIndex::getName, Function.identity()));
 
 
         List<String> collect = indexResolver.resolverAllIndex(paramMaps, indexMap, prefix);
@@ -75,9 +69,9 @@ public class EvictAction {
         //执行原方法
         Object proceed = joinPoint.proceed();
 
-        log.info("-----Do Delete------");
-        collect.forEach(log::info);
-        log.info("-------Delete Finish-------");
+        //提交删除任务
+        List<DelOps> opsList = collect.stream().map(DelOps::new).collect(Collectors.toList());
+        deleteOpsExe.execute(opsList);
 
 
         return proceed;
