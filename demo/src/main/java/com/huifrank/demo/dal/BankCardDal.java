@@ -19,4 +19,6 @@ public interface BankCardDal {
     int updateByIdAndName(String id, String name);
 
     int updateByMobileAndCardNo(String mobile, String cardNo);
+
+    int updateByMobile(String mobile );
 }

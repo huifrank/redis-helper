@@ -44,7 +44,7 @@ public class IndexResolver {
                 .filter(p -> CacheIndexType.ClusterIndex.equals(p.getValue().getIndexType()))
                 .map(p -> p.getValue()).collect(Collectors.toList());
 
-        List<Expression> byNormalKeys = normal.stream().map(p -> normalIndex(prefix, clusterType, p,indexMap))
+        List<Expression> byNormalKeys = normal.stream().map(p -> normalIndexWithRef(prefix, clusterType, p,indexMap))
                 .collect(Collectors.toList());
 
         List<Expression> byClusterKeys = cluster.stream().map(p -> clusterIndex(prefix, clusterType, p))
@@ -82,33 +82,41 @@ public class IndexResolver {
                 case ClusterIndex:
                     return clusterIndex(prefix, Collections.singletonList(cacheIndex), paramMap).get(0);
                 case NormalIndex:
-//                    return normalIndex(prefix, Collections.singletonList(cacheIndex), paramMap, indexMap);
+                    return normalIndexOnly(prefix, paramMap );
                 default:
                     throw new RuntimeException("不支持的索引类型");
             }
         }).collect(Collectors.toList());
 
-        log.info(expressions.toString());
+
+        curExp.addAll(expressions);
 
 
     }
 
+    private Expression normalIndexOnly(final String prefix,ParamMap curParam){
 
-
-    private Expression normalIndex(final String prefix,List<CacheIndex> clusterIndex,ParamMap curParam,Map<String, CacheIndex> indexMap){
-
-        CacheIndex cacheIndex = indexMap.get(curParam.getName());
-        CacheIndex clusterType = clusterIndex.stream().collect(Collectors.toMap(  CacheIndex::getName, Function.identity()))
-                .get(cacheIndex.getRefIndex());
         TypeHandler typeHandler = typeHandlers.get(curParam.getValueTypeName());
 
         String normal = prefix+ CACHE_SPLIT+curParam.getName()+CACHE_SPLIT+typeHandler.resolve2String(curParam.getValue());
-        String cluster = prefix+  CACHE_SPLIT+clusterType.getName()+CACHE_SPLIT;
 
         Expression before = new Expression();
         before.setTerm(normal)
                 .setCacheIndexType(CacheIndexType.NormalIndex)
                 .setName(curParam.getName());
+
+        return before;
+    }
+
+
+    private Expression normalIndexWithRef(final String prefix,List<CacheIndex> clusterIndex,ParamMap curParam,Map<String, CacheIndex> indexMap){
+
+        CacheIndex cacheIndex = indexMap.get(curParam.getName());
+        CacheIndex clusterType = clusterIndex.stream().collect(Collectors.toMap(  CacheIndex::getName, Function.identity()))
+                .get(cacheIndex.getRefIndex());
+        String cluster = prefix+  CACHE_SPLIT+clusterType.getName()+CACHE_SPLIT;
+
+        Expression before = normalIndexOnly(prefix,curParam);
         //关联到聚簇索引
         Expression expression = new Expression();
         expression.setTerm(cluster)
