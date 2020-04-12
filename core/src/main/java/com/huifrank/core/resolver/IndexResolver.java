@@ -6,14 +6,18 @@ import com.huifrank.core.pojo.Expression;
 import com.huifrank.core.pojo.ParamMap;
 import com.huifrank.core.typeHandler.TypeHandler;
 import com.huifrank.core.typeHandler.impl.StringTypeHandler;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+@Slf4j
 public class IndexResolver {
 
-    private static String CACHE_SPLIT =":";
+    private static final String CACHE_SPLIT =":";
 
     static Map<String, TypeHandler> typeHandlers;
     static {
@@ -52,22 +56,60 @@ public class IndexResolver {
         res.addAll(byClusterKeys);
         res.addAll(byNormalKeys);
 
+        complementOtherIndex(prefix,res,indexMap);
+
         return res;
     }
 
-    private Expression normalIndex(String prefix,List<CacheIndex> clusterIndex,ParamMap curParam,Map<String, CacheIndex> indexMap){
+
+    private void complementOtherIndex(final String prefix,List<Expression> curExp, Map<String, CacheIndex> indexMap){
+
+        Expression first = curExp.stream()
+                .filter(c -> CacheIndexType.ClusterIndex.equals(c.getCacheIndexType()))
+                .findFirst().orElseThrow(()->new RuntimeException("普通索引必须关联有聚簇索引"));
+        List<String> allFieldNames = curExp.stream()
+                .map(Expression::getExpNames)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        List<String> needComplement = indexMap.keySet().stream().filter(f -> !allFieldNames.contains(f)).collect(Collectors.toList());
+
+
+        List<Expression> expressions = needComplement.stream().map(name -> {
+            CacheIndex cacheIndex = indexMap.get(name);
+            ParamMap paramMap = new ParamMap(name, 0, "(" + first + ")." + name, String.class.getName());
+            switch (cacheIndex.getIndexType()) {
+                case ClusterIndex:
+                    return clusterIndex(prefix, Collections.singletonList(cacheIndex), paramMap).get(0);
+                case NormalIndex:
+//                    return normalIndex(prefix, Collections.singletonList(cacheIndex), paramMap, indexMap);
+                default:
+                    throw new RuntimeException("不支持的索引类型");
+            }
+        }).collect(Collectors.toList());
+
+        log.info(expressions.toString());
+
+
+    }
+
+
+
+    private Expression normalIndex(final String prefix,List<CacheIndex> clusterIndex,ParamMap curParam,Map<String, CacheIndex> indexMap){
 
         CacheIndex cacheIndex = indexMap.get(curParam.getName());
         CacheIndex clusterType = clusterIndex.stream().collect(Collectors.toMap(  CacheIndex::getName, Function.identity()))
                 .get(cacheIndex.getRefIndex());
+        TypeHandler typeHandler = typeHandlers.get(curParam.getValueTypeName());
 
-        String normal = prefix+ CACHE_SPLIT+curParam.getName()+CACHE_SPLIT+curParam.getValue();
+        String normal = prefix+ CACHE_SPLIT+curParam.getName()+CACHE_SPLIT+typeHandler.resolve2String(curParam.getValue());
         String cluster = prefix+  CACHE_SPLIT+clusterType.getName()+CACHE_SPLIT;
 
         Expression before = new Expression();
         before.setTerm(normal)
                 .setCacheIndexType(CacheIndexType.NormalIndex)
                 .setName(curParam.getName());
+        //关联到聚簇索引
         Expression expression = new Expression();
         expression.setTerm(cluster)
                 .setName(clusterType.getName())
@@ -78,10 +120,11 @@ public class IndexResolver {
         return expression;
     }
 
-    private List<Expression> clusterIndex( String prefix,List<CacheIndex> clusterIndex,ParamMap curParam){
+    private List<Expression> clusterIndex(final String prefix,List<CacheIndex> clusterIndex,ParamMap curParam){
         Map<String, CacheIndex> clusterMap = clusterIndex.stream().collect(Collectors.toMap(CacheIndex::getName, Function.identity()));
         CacheIndex clu = clusterMap.get(curParam.getName());
-        String cluster =prefix+ CACHE_SPLIT+clu.getName()+CACHE_SPLIT+curParam.getValue();
+        TypeHandler typeHandler = typeHandlers.get(curParam.getValueTypeName());
+        String cluster =prefix+ CACHE_SPLIT+clu.getName()+CACHE_SPLIT+typeHandler.resolve2String(curParam.getValue());
         Expression expression = new Expression();
         expression.setTerm(cluster)
                 .setName(clu.getName())
