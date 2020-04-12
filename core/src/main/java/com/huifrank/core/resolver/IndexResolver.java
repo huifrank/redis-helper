@@ -82,9 +82,9 @@ public class IndexResolver {
             ParamMap paramMap = new ParamMap(name, 0, "(" + first + ")." + name, String.class.getName());
             switch (cacheIndex.getIndexType()) {
                 case ClusterIndex:
-                    return clusterIndex(prefix, Collections.singletonList(cacheIndex), paramMap).get(0);
+                    return clusterIndex(prefix, Collections.singletonList(cacheIndex), first,name).get(0);
                 case NormalIndex:
-                    return normalIndexOnly(prefix, paramMap );
+                    return normalIndexOnly(prefix, first,name );
                 default:
                     throw new RuntimeException("不支持的索引类型");
             }
@@ -94,6 +94,21 @@ public class IndexResolver {
         curExp.addAll(expressions);
 
 
+    }
+
+
+    private Expression normalIndexOnly(final String prefix,Expression before,String indexName){
+
+
+        String normal = prefix+ CACHE_SPLIT+indexName+CACHE_SPLIT;
+
+        Expression expression = new Expression();
+        expression.setTerm(normal)
+                .setCacheIndexType(CacheIndexType.NormalIndex)
+                .setName(indexName);
+        expression.setBefore(before);
+
+        return before;
     }
 
     private Expression normalIndexOnly(final String prefix,ParamMap curParam){
@@ -128,6 +143,20 @@ public class IndexResolver {
 
 
         return expression;
+    }
+
+    private List<Expression> clusterIndex(final String prefix,List<CacheIndex> clusterIndex,Expression before,String indexName){
+        Map<String, CacheIndex> clusterMap = clusterIndex.stream().collect(Collectors.toMap(CacheIndex::getName, Function.identity()));
+        CacheIndex clu = clusterMap.get(indexName);
+        String cluster = prefix+ CACHE_SPLIT+clu.getName()+CACHE_SPLIT;
+        Expression expression = new Expression();
+        expression.setTerm(cluster)
+                .setName(clu.getName())
+                .setCacheIndexType(CacheIndexType.ClusterIndex);
+        expression.setBefore(before);
+
+        return Collections.singletonList(expression);
+
     }
 
     private List<Expression> clusterIndex(final String prefix,List<CacheIndex> clusterIndex,ParamMap curParam){

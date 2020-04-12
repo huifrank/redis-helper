@@ -51,12 +51,12 @@ public class EvictAopTest {
     @Test
     public void testEvictMobileAndCardNo(){
 
-        bankCardDal.updateByMobileAndCardNo("cardNo","mobile");
+        bankCardDal.updateByMobileAndCardNo("cardNo_123456","mobile_123456");
     }
     @Test
     public void testEvictByMobileOnly(){
 
-        bankCardDal.updateByMobile("mobile");
+        bankCardDal.updateByMobile("mobile_123456");
     }
 
 
