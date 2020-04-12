@@ -56,6 +56,7 @@ bankCard:mobile:{mobile}              ->  {bankCard.indexCardId}
 ### 使用
 
 <b>入参仅聚簇索引</b>
+
 如果参数值和`bufferEntity`中的缓存key名字一样的话可以省略`@Filed`注解
 ```java
     @Evict
