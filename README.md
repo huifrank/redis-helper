@@ -10,11 +10,11 @@
     普通索引，该索引下挂的为关联值，需要根据关联值进行"回表"到聚簇索引取到实际缓存值
 
 
-支持配置多个聚簇索引，普通索引必须关联一个普通缩影。
+支持配置多个聚簇索引，普通索引必须关联一个聚簇索引
 
 ## demo
 
-配置:
+### 配置:
 
 ```java
 @BufferEntity(keyPrefix = "bankCard")
@@ -53,8 +53,9 @@ bankCard:mobile:{mobile}              ->  {bankCard.indexCardId}
 
 ```
 
-缓存层方法：
+### 使用
 
+<b>入参仅聚簇索引</b>
 如果参数值和`bufferEntity`中的缓存key名字一样的话可以省略`@Filed`注解
 ```java
     @Evict
@@ -72,7 +73,7 @@ bankCard:mobile:{mobile}              ->  {bankCard.indexCardId}
 ->bankCard:cardNo:(bankCard:id:{id}).cardNo
 ```
 
-再看复杂一点的：
+<b>入参两个普通索引</b>
 ```java
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
@@ -86,7 +87,7 @@ bankCard:mobile:{mobile}              ->  {bankCard.indexCardId}
 ->bankCard:id:(bankCard:cardNo:{cardNo})
 ->bankCard:indexCardId:(bankCard:mobile:{mobile})
 ```
-还可以更复杂的 入参中有一个参数不在索引列表中:
+<b>入参一个普通索引，一个没有索引</b>
 ```java
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
