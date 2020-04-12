@@ -100,7 +100,7 @@ bankCard:mobile:{mobile}              ->  {bankCard.indexCardId}
 
 对应的缓存key为：
 ```
-->bankCard:id:(bankCard:cardNo:a)
-->bankCard:indexCardId:(bankCard:id:(bankCard:cardNo:a)).indexCardId
-->bankCard:mobile:(bankCard:id:(bankCard:cardNo:a)).mobile
+->bankCard:id:(bankCard:cardNo:{cardNo})
+->bankCard:indexCardId:(bankCard:id:(bankCard:cardNo:{cardNo})).indexCardId
+->bankCard:mobile:(bankCard:id:(bankCard:cardNo:{cardNo})).mobile
 ```
