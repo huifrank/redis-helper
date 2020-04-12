@@ -79,12 +79,12 @@ public class IndexResolver {
         //补全
         List<Expression> expressions = needComplement.stream().map(name -> {
             CacheIndex cacheIndex = indexMap.get(name);
-            ParamMap paramMap = new ParamMap(name, 0, "(" + first + ")." + name, String.class.getName());
+            Expression before = first.newInstance();
             switch (cacheIndex.getIndexType()) {
                 case ClusterIndex:
-                    return clusterIndex(prefix, Collections.singletonList(cacheIndex), first,name).get(0);
+                    return clusterIndex(prefix, Collections.singletonList(cacheIndex), before,name).get(0);
                 case NormalIndex:
-                    return normalIndexOnly(prefix, first,name );
+                    return normalIndexOnly(prefix, before,name );
                 default:
                     throw new RuntimeException("不支持的索引类型");
             }
@@ -97,18 +97,19 @@ public class IndexResolver {
     }
 
 
-    private Expression normalIndexOnly(final String prefix,Expression before,String indexName){
+    private Expression normalIndexOnly(final String prefix,Expression before,String refName){
 
 
-        String normal = prefix+ CACHE_SPLIT+indexName+CACHE_SPLIT;
+        String normal = prefix+ CACHE_SPLIT+refName+CACHE_SPLIT;
 
         Expression expression = new Expression();
         expression.setTerm(normal)
                 .setCacheIndexType(CacheIndexType.NormalIndex)
-                .setName(indexName);
+                .setName(refName)
+                .setRefBeforeName(refName);
         expression.setBefore(before);
 
-        return before;
+        return expression;
     }
 
     private Expression normalIndexOnly(final String prefix,ParamMap curParam){
@@ -145,14 +146,15 @@ public class IndexResolver {
         return expression;
     }
 
-    private List<Expression> clusterIndex(final String prefix,List<CacheIndex> clusterIndex,Expression before,String indexName){
+    private List<Expression> clusterIndex(final String prefix,List<CacheIndex> clusterIndex,Expression before,String refName){
         Map<String, CacheIndex> clusterMap = clusterIndex.stream().collect(Collectors.toMap(CacheIndex::getName, Function.identity()));
-        CacheIndex clu = clusterMap.get(indexName);
+        CacheIndex clu = clusterMap.get(refName);
         String cluster = prefix+ CACHE_SPLIT+clu.getName()+CACHE_SPLIT;
         Expression expression = new Expression();
         expression.setTerm(cluster)
                 .setName(clu.getName())
-                .setCacheIndexType(CacheIndexType.ClusterIndex);
+                .setCacheIndexType(CacheIndexType.ClusterIndex)
+                .setRefBeforeName(refName);
         expression.setBefore(before);
 
         return Collections.singletonList(expression);

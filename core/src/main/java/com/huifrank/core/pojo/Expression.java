@@ -13,6 +13,8 @@ public class Expression {
 
     private Expression before;
 
+    private String refBeforeName;
+
     private String term;
 
     private String name;
@@ -23,11 +25,30 @@ public class Expression {
     public String toString(){
 
         if(before != null) {
+            if(refBeforeName != null){
+                return cacheIndexType + "->" + term + "(" + before.toString() + ")."+refBeforeName;
+            }
             return cacheIndexType + "->" + term + "(" + before.toString() + ")";
         }else {
             return cacheIndexType + "->" + term;
         }
 
+    }
+
+    /**
+     * 复制一个对象出来
+     * @return
+     */
+    public Expression newInstance(){
+        Expression expression = new Expression();
+        expression.setRefBeforeName(this.refBeforeName)
+                .setTerm(this.term)
+                .setName(this.name)
+                .setCacheIndexType(this.cacheIndexType);
+        if(this.before != null) {
+            expression.setBefore(this.before.newInstance());
+        }
+        return expression;
     }
 
     /**

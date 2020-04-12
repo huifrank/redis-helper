@@ -45,7 +45,7 @@ public class EvictAopTest {
     @Test
     public void testEvictIdAndName(){
 
-        bankCardDal.updateByIdAndName("id","name");
+        bankCardDal.updateByIdAndName("id_123456","name_123456");
     }
 
     @Test
