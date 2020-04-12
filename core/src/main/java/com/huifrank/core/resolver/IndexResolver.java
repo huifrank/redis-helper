@@ -52,7 +52,7 @@ public class IndexResolver {
                 .collect(Collectors.toList());
 
 
-        List<Expression> res = new ArrayList<>(byNormalKeys.size()+byClusterKeys.size());
+        List<Expression> res = new ArrayList<>();
         res.addAll(byClusterKeys);
         res.addAll(byNormalKeys);
 
@@ -72,9 +72,11 @@ public class IndexResolver {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
+        //过滤出入参中没有覆盖到的其他缓存key
         List<String> needComplement = indexMap.keySet().stream().filter(f -> !allFieldNames.contains(f)).collect(Collectors.toList());
 
 
+        //补全
         List<Expression> expressions = needComplement.stream().map(name -> {
             CacheIndex cacheIndex = indexMap.get(name);
             ParamMap paramMap = new ParamMap(name, 0, "(" + first + ")." + name, String.class.getName());

@@ -58,6 +58,7 @@ public class EvictAction {
 
         //解析入参
         Parameter[] parameters = signature.getMethod().getParameters();
+        //把参数名，参数值关联
         List<ParamMap> paramMaps = paramsResolver.resolverParameters(parameters,joinPoint.getArgs());
 
         Map<String, CacheIndex> indexMap = cacheIndices.stream()
