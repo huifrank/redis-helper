@@ -31,9 +31,9 @@ public class EvictAopTest {
     public void testEvict(){
 
         bankCardDal.updateByCardNoAndType("cardNo_13123","cardType_D");
-        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("ClusterIndex->bankCard:id:(NormalIndex->bankCard:cardNo:cardNo_13123)")),
-                ()->Assertions.assertTrue(exe4Test.containsExp("ClusterIndex->bankCard:indexCardId:(ClusterIndex->bankCard:id:(NormalIndex->bankCard:cardNo:cardNo_13123)).indexCardId")),
-                ()->Assertions.assertTrue(exe4Test.containsExp("NormalIndex->bankCard:mobile:(ClusterIndex->bankCard:id:(NormalIndex->bankCard:cardNo:cardNo_13123)).mobile"))
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->bankCard:cardNo:cardNo_13123)")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:id:(->bankCard:cardNo:cardNo_13123)).indexCardId")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:mobile:(->bankCard:id:(->bankCard:cardNo:cardNo_13123)).mobile"))
         );
         Assertions.assertEquals(3,exe4Test.expSize());
     }
@@ -41,34 +41,64 @@ public class EvictAopTest {
     public void testEvictMobile(){
 
         bankCardDal.updateByCardNoAndMobile("cardNo_13123","mobile_13223");
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->bankCard:cardNo:cardNo_13123)")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:mobile:mobile_13223)"))
+        );
+        Assertions.assertEquals(2,exe4Test.expSize());
     }
 
     @Test
     public void testEvictId(){
 
         bankCardDal.updateById("1","13223422312");
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:1")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:mobile:13223422312)")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:cardNo:(->bankCard:id:1).cardNo"))
+        );
+        Assertions.assertEquals(3,exe4Test.expSize());
     }
     @Test
     public void testEvictIdOnly(){
 
-        bankCardDal.updateById("a");
+        bankCardDal.updateById("id_1");
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:id_1")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:id:id_1).indexCardId")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:mobile:(->bankCard:id:id_1).mobile")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:cardNo:(->bankCard:id:id_1).cardNo"))
+        );
+        Assertions.assertEquals(4,exe4Test.expSize());
     }
 
     @Test
     public void testEvictIdAndName(){
 
         bankCardDal.updateByIdAndName("id_123456","name_123456");
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:id_123456")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:id:id_123456).indexCardId")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:mobile:(->bankCard:id:id_123456).mobile")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:cardNo:(->bankCard:id:id_123456).cardNo"))
+        );
+        Assertions.assertEquals(4,exe4Test.expSize());
     }
 
     @Test
     public void testEvictMobileAndCardNo(){
 
         bankCardDal.updateByMobileAndCardNo("cardNo_123456","mobile_123456");
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->bankCard:cardNo:cardNo_123456)")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:mobile:mobile_123456)"))
+        );
+        Assertions.assertEquals(2,exe4Test.expSize());
     }
     @Test
     public void testEvictByMobileOnly(){
 
         bankCardDal.updateByMobile("mobile_123456");
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:mobile:mobile_123456)")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->bankCard:indexCardId:(->bankCard:mobile:mobile_123456)).id")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:cardNo:(->bankCard:indexCardId:(->bankCard:mobile:mobile_123456)).cardNo"))
+        );
+        Assertions.assertEquals(3,exe4Test.expSize());
     }
 
 

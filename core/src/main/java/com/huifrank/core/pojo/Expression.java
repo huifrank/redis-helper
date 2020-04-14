@@ -26,11 +26,11 @@ public class Expression {
 
         if(before != null) {
             if(refBeforeName != null){
-                return cacheIndexType + "->" + term + "(" + before.toString() + ")."+refBeforeName;
+                return  "->" + term + "(" + before.toString() + ")."+refBeforeName;
             }
-            return cacheIndexType + "->" + term + "(" + before.toString() + ")";
+            return   "->" + term + "(" + before.toString() + ")";
         }else {
-            return cacheIndexType + "->" + term;
+            return   "->" + term;
         }
 
     }
