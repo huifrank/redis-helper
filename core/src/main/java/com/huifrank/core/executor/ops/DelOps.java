@@ -1,6 +1,7 @@
 package com.huifrank.core.executor.ops;
 
 import com.huifrank.core.CacheIndexType;
+import com.huifrank.core.pojo.Expression;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,13 +9,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class DelOps implements CacheOps{
 
-    String expression;
+    Expression expression;
 
     String name;
 
     CacheIndexType cacheIndexType;
 
-    public DelOps(String expression){
+    public DelOps(Expression expression){
         this.expression = expression;
     }
 

@@ -3,6 +3,7 @@ package com.huifrank.core.action;
 
 import com.huifrank.annotation.BufferEntity;
 import com.huifrank.annotation.CacheFor;
+import com.huifrank.core.executor.DeleteExe4Test;
 import com.huifrank.core.executor.DeleteOpsExe;
 import com.huifrank.core.executor.ops.DelOps;
 import com.huifrank.core.pojo.Expression;
@@ -36,7 +37,7 @@ public class EvictAction {
 
     IndexResolver indexResolver = new IndexResolver();
 
-    DeleteOpsExe deleteOpsExe = new DeleteOpsExe();
+    DeleteOpsExe deleteOpsExe = DeleteExe4Test.getInstance();
 
 
     @Around(value = "@annotation(com.huifrank.annotation.action.Evict)")
@@ -72,7 +73,7 @@ public class EvictAction {
         Object proceed = joinPoint.proceed();
 
         //提交删除任务
-        List<DelOps> opsList = collect.stream().map(o-> new DelOps(o.toString())).collect(Collectors.toList());
+        List<DelOps> opsList = collect.stream().map(o-> new DelOps(o)).collect(Collectors.toList());
         deleteOpsExe.execute(opsList);
 
 

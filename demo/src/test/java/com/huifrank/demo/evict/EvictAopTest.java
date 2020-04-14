@@ -1,8 +1,10 @@
 package com.huifrank.demo.evict;
 
 import com.huifrank.core.action.EvictAction;
+import com.huifrank.core.executor.DeleteExe4Test;
 import com.huifrank.demo.RedisHelperDemoRunner;
 import com.huifrank.demo.dal.BankCardDal;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -18,17 +20,18 @@ public class EvictAopTest {
     BankCardDal bankCardDal;
 
 
+    DeleteExe4Test exe4Test = DeleteExe4Test.getInstance();
 
 
     @Test
     public void testEvict(){
 
-        bankCardDal.updateByCardNoAndType("a","D");
+        bankCardDal.updateByCardNoAndType("cardNo_13123","cardType_D");
     }
     @Test
     public void testEvictMobile(){
 
-        bankCardDal.updateByCardNoAndMobile("a","13223422312");
+        bankCardDal.updateByCardNoAndMobile("cardNo_13123","mobile_13223");
     }
 
     @Test
