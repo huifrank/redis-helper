@@ -32,7 +32,7 @@ public class DeleteExe4Test implements DeleteOpsExe{
 
 
     public boolean containsExp(String exp){
-        return exp.contains(exp);
+        return this.exp.contains(exp);
     }
 
     public int expSize(){

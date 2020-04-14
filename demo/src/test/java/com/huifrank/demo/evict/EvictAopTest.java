@@ -6,12 +6,16 @@ import com.huifrank.demo.RedisHelperDemoRunner;
 import com.huifrank.demo.dal.BankCardDal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest(classes = RedisHelperDemoRunner.class)
 public class EvictAopTest {
@@ -27,6 +31,11 @@ public class EvictAopTest {
     public void testEvict(){
 
         bankCardDal.updateByCardNoAndType("cardNo_13123","cardType_D");
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("ClusterIndex->bankCard:id:(NormalIndex->bankCard:cardNo:cardNo_13123)")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("ClusterIndex->bankCard:indexCardId:(ClusterIndex->bankCard:id:(NormalIndex->bankCard:cardNo:cardNo_13123)).indexCardId")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("NormalIndex->bankCard:mobile:(ClusterIndex->bankCard:id:(NormalIndex->bankCard:cardNo:cardNo_13123)).mobile"))
+        );
+        Assertions.assertEquals(3,exe4Test.expSize());
     }
     @Test
     public void testEvictMobile(){
