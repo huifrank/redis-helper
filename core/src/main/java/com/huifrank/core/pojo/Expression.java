@@ -15,7 +15,7 @@ public class Expression {
 
     private String refBeforeName;
 
-    private String term;
+    private Term term;
 
     private String name;
 

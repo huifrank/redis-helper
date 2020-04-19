@@ -4,15 +4,14 @@ import com.huifrank.core.CacheIndexType;
 import com.huifrank.core.pojo.CacheIndex;
 import com.huifrank.core.pojo.Expression;
 import com.huifrank.core.pojo.ParamMap;
+import com.huifrank.core.pojo.Term;
 import com.huifrank.core.typeHandler.TypeHandler;
 import com.huifrank.core.typeHandler.impl.StringTypeHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 public class IndexResolver {
@@ -79,12 +78,11 @@ public class IndexResolver {
         //补全
         List<Expression> expressions = needComplement.stream().map(name -> {
             CacheIndex cacheIndex = indexMap.get(name);
-            Expression before = first.newInstance();
             switch (cacheIndex.getIndexType()) {
                 case ClusterIndex:
-                    return clusterIndex(prefix, Collections.singletonList(cacheIndex), before,name).get(0);
+                    return complementClusterIndexByCluster(prefix, Collections.singletonList(cacheIndex), first,name).get(0);
                 case NormalIndex:
-                    return normalIndexOnly(prefix, before,name );
+                    return complementNormalIndexByCluster(prefix, first,name );
                 default:
                     throw new RuntimeException("不支持的索引类型");
             }
@@ -97,13 +95,13 @@ public class IndexResolver {
     }
 
 
-    private Expression normalIndexOnly(final String prefix,Expression before,String refName){
+    private Expression complementNormalIndexByCluster(final String prefix,Expression before,String refName){
 
 
         String normal = prefix+ CACHE_SPLIT+refName+CACHE_SPLIT;
 
         Expression expression = new Expression();
-        expression.setTerm(normal)
+        expression.setTerm(new Term(normal,null))
                 .setCacheIndexType(CacheIndexType.NormalIndex)
                 .setName(refName)
                 .setRefBeforeName(refName);
@@ -112,14 +110,17 @@ public class IndexResolver {
         return expression;
     }
 
+    /**
+     * 仅普通索引，不做关联
+     */
     private Expression normalIndexOnly(final String prefix,ParamMap curParam){
 
         TypeHandler typeHandler = typeHandlers.get(curParam.getValueTypeName());
 
-        String normal = prefix+ CACHE_SPLIT+curParam.getName()+CACHE_SPLIT+typeHandler.resolve2String(curParam.getValue());
+        String normal = prefix+ CACHE_SPLIT+curParam.getName()+CACHE_SPLIT;
 
         Expression before = new Expression();
-        before.setTerm(normal)
+        before.setTerm(new Term(normal,typeHandler.resolve2String(curParam.getValue())))
                 .setCacheIndexType(CacheIndexType.NormalIndex)
                 .setName(curParam.getName());
 
@@ -127,6 +128,10 @@ public class IndexResolver {
     }
 
 
+    /**
+     * 根据普通索引，关联至聚簇索引
+     * @return
+     */
     private Expression normalIndexWithRef(final String prefix,List<CacheIndex> clusterIndex,ParamMap curParam,Map<String, CacheIndex> indexMap){
 
         CacheIndex cacheIndex = indexMap.get(curParam.getName());
@@ -137,7 +142,7 @@ public class IndexResolver {
         Expression before = normalIndexOnly(prefix,curParam);
         //关联到聚簇索引
         Expression expression = new Expression();
-        expression.setTerm(cluster)
+        expression.setTerm(new Term(cluster,null))
                 .setName(clusterType.getName())
                 .setCacheIndexType(CacheIndexType.ClusterIndex)
                 .setBefore(before);
@@ -146,12 +151,12 @@ public class IndexResolver {
         return expression;
     }
 
-    private List<Expression> clusterIndex(final String prefix,List<CacheIndex> clusterIndex,Expression before,String refName){
+    private List<Expression> complementClusterIndexByCluster(final String prefix,List<CacheIndex> clusterIndex,Expression before,String refName){
         Map<String, CacheIndex> clusterMap = clusterIndex.stream().collect(Collectors.toMap(CacheIndex::getName, Function.identity()));
         CacheIndex clu = clusterMap.get(refName);
         String cluster = prefix+ CACHE_SPLIT+clu.getName()+CACHE_SPLIT;
         Expression expression = new Expression();
-        expression.setTerm(cluster)
+        expression.setTerm(new Term(cluster,null))
                 .setName(clu.getName())
                 .setCacheIndexType(CacheIndexType.ClusterIndex)
                 .setRefBeforeName(refName);
@@ -165,9 +170,9 @@ public class IndexResolver {
         Map<String, CacheIndex> clusterMap = clusterIndex.stream().collect(Collectors.toMap(CacheIndex::getName, Function.identity()));
         CacheIndex clu = clusterMap.get(curParam.getName());
         TypeHandler typeHandler = typeHandlers.get(curParam.getValueTypeName());
-        String cluster =prefix+ CACHE_SPLIT+clu.getName()+CACHE_SPLIT+typeHandler.resolve2String(curParam.getValue());
+        String cluster =prefix+ CACHE_SPLIT+clu.getName()+CACHE_SPLIT;
         Expression expression = new Expression();
-        expression.setTerm(cluster)
+        expression.setTerm(new Term(cluster, typeHandler.resolve2String(curParam.getValue()) ))
                 .setName(clu.getName())
                 .setCacheIndexType(CacheIndexType.ClusterIndex);
 
