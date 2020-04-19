@@ -12,6 +12,8 @@ public class Term {
     private String indexName;
     private String value;
 
+    private String refBeforeName;
+
     private Expression before;
 
 

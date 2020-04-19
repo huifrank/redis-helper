@@ -101,10 +101,9 @@ public class IndexResolver {
         String normal = prefix+ CACHE_SPLIT+refName+CACHE_SPLIT;
 
         Expression expression = new Expression();
-        expression.setTerm(new Term(normal,null).setBefore(before))
+        expression.setTerm(new Term(normal,null).setBefore(before).setRefBeforeName(refName))
                 .setCacheIndexType(CacheIndexType.NormalIndex)
-                .setName(refName)
-                .setRefBeforeName(refName);
+                .setName(refName);
 
         return expression;
     }
@@ -154,10 +153,9 @@ public class IndexResolver {
         CacheIndex clu = clusterMap.get(refName);
         String cluster = prefix+ CACHE_SPLIT+clu.getName()+CACHE_SPLIT;
         Expression expression = new Expression();
-        expression.setTerm(new Term(cluster,null).setBefore(before))
+        expression.setTerm(new Term(cluster,null).setBefore(before).setRefBeforeName(refName))
                 .setName(clu.getName())
-                .setCacheIndexType(CacheIndexType.ClusterIndex)
-                .setRefBeforeName(refName);
+                .setCacheIndexType(CacheIndexType.ClusterIndex);
 
         return Collections.singletonList(expression);
 

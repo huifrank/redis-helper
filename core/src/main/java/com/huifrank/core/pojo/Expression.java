@@ -12,7 +12,6 @@ import java.util.List;
 public class Expression {
 
 
-    private String refBeforeName;
 
     private Term term;
 
@@ -24,8 +23,8 @@ public class Expression {
     public String toString(){
 
         if(term.getBefore() != null) {
-            if(refBeforeName != null){
-                return  "->" + term + "(" +term.getBefore() + ")."+refBeforeName;
+            if(term.getRefBeforeName() != null){
+                return  "->" + term + "(" +term.getBefore() + ")."+term.getRefBeforeName();
             }
             return   "->" + term + "(" + term.getBefore() + ")";
         }else {
