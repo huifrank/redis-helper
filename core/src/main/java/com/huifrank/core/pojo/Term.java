@@ -12,6 +12,14 @@ public class Term {
     private String indexName;
     private String value;
 
+    private Expression before;
+
+
+    public Term(String indexName,String value){
+        this.indexName = indexName;
+        this.value = value;
+    }
+
     @Override
     public String toString(){
         if(value == null){

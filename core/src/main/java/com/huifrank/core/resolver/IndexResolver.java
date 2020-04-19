@@ -101,11 +101,10 @@ public class IndexResolver {
         String normal = prefix+ CACHE_SPLIT+refName+CACHE_SPLIT;
 
         Expression expression = new Expression();
-        expression.setTerm(new Term(normal,null))
+        expression.setTerm(new Term(normal,null).setBefore(before))
                 .setCacheIndexType(CacheIndexType.NormalIndex)
                 .setName(refName)
                 .setRefBeforeName(refName);
-        expression.setBefore(before);
 
         return expression;
     }
@@ -142,10 +141,9 @@ public class IndexResolver {
         Expression before = normalIndexOnly(prefix,curParam);
         //关联到聚簇索引
         Expression expression = new Expression();
-        expression.setTerm(new Term(cluster,null))
+        expression.setTerm(new Term(cluster,null).setBefore(before))
                 .setName(clusterType.getName())
-                .setCacheIndexType(CacheIndexType.ClusterIndex)
-                .setBefore(before);
+                .setCacheIndexType(CacheIndexType.ClusterIndex);
 
 
         return expression;
@@ -156,11 +154,10 @@ public class IndexResolver {
         CacheIndex clu = clusterMap.get(refName);
         String cluster = prefix+ CACHE_SPLIT+clu.getName()+CACHE_SPLIT;
         Expression expression = new Expression();
-        expression.setTerm(new Term(cluster,null))
+        expression.setTerm(new Term(cluster,null).setBefore(before))
                 .setName(clu.getName())
                 .setCacheIndexType(CacheIndexType.ClusterIndex)
                 .setRefBeforeName(refName);
-        expression.setBefore(before);
 
         return Collections.singletonList(expression);
 
