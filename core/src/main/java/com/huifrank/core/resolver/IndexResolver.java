@@ -6,8 +6,6 @@ import com.huifrank.core.pojo.CacheIndex;
 import com.huifrank.core.pojo.Expression;
 import com.huifrank.core.pojo.ParamMap;
 import com.huifrank.core.pojo.Term;
-import com.huifrank.core.typeHandler.TypeHandler;
-import com.huifrank.core.typeHandler.impl.StringTypeHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -18,11 +16,6 @@ import java.util.stream.Collectors;
 public class IndexResolver {
 
 
-    static Map<String, TypeHandler> typeHandlers;
-    static {
-        typeHandlers = new HashMap<>();
-        typeHandlers.put("java.lang.String",new StringTypeHandler());
-    }
 
 
     public List<Expression> resolverAllIndex(List<ParamMap> paramMaps, Map<String, CacheIndex> indexMap,String prefix){

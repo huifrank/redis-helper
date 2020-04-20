@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class EvictAction {
 
-    BufferEntityResolver entityResolver = new BufferEntityResolver();
 
     ParamsResolver paramsResolver = new ParamsResolver();
 
