@@ -12,15 +12,15 @@ import java.util.stream.IntStream;
 public class ParamsResolver {
 
 
-    public List<ParamMap> resolverParameters(Parameter[] parameters,Object[] args) {
+    public List<ParamMap> resolverParameters(Parameter[] parameters) {
 
         return IntStream.range(0,parameters.length).mapToObj(index ->{
             Parameter p = parameters[index];
             Field annotation = p.getAnnotation(Field.class);
             if(annotation == null){
-                return new ParamMap(p.getName(),index,args[index],p.getType().getTypeName());
+                return new ParamMap(p.getName(),index,p.getType().getTypeName());
             }
-            return new ParamMap(annotation.value(),index,args[index],p.getType().getTypeName());
+            return new ParamMap(annotation.value(),index,p.getType().getTypeName());
 
         } ).collect(Collectors.toList());
     }

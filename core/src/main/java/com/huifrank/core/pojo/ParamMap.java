@@ -11,8 +11,6 @@ public class ParamMap {
 
     private int index;
 
-    private Object value;
-
     private String valueTypeName;
 
 

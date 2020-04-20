@@ -10,23 +10,23 @@ import lombok.experimental.Accessors;
 public class Term {
 
     private String indexName;
-    private String value;
+
+    private Integer valueIndex;
 
     private String refBeforeName;
 
     private Expression before;
 
 
-    public Term(String indexName,String value){
+    public Term(String indexName){
         this.indexName = indexName;
-        this.value = value;
     }
 
     @Override
     public String toString(){
-        if(value == null){
+        if(valueIndex == null){
             return indexName;
         }
-        return indexName+value;
+        return indexName+"["+valueIndex+"]";
     }
 }

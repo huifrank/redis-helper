@@ -3,6 +3,7 @@ package com.huifrank.core.action;
 
 import com.huifrank.annotation.BufferEntity;
 import com.huifrank.annotation.CacheFor;
+import com.huifrank.core.context.CacheContext;
 import com.huifrank.core.executor.DeleteExe4Test;
 import com.huifrank.core.executor.DeleteOpsExe;
 import com.huifrank.core.executor.ops.DelOps;
@@ -39,6 +40,8 @@ public class EvictAction {
 
     DeleteOpsExe deleteOpsExe = DeleteExe4Test.getInstance();
 
+    CacheContext cacheContext = new CacheContext();
+
 
     @Around(value = "@annotation(com.huifrank.annotation.action.Evict)")
     public Object doEvictAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -55,12 +58,11 @@ public class EvictAction {
         //索引前缀
         String prefix = bufferEntity.keyPrefix();
         //当前前缀索引列表
-        List<CacheIndex> cacheIndices = entityResolver.resolverEntity(entity);
+        List<CacheIndex> cacheIndices = cacheContext.getCacheIndex(entity);
 
-        //解析入参
         Parameter[] parameters = signature.getMethod().getParameters();
-        //把参数名，参数值关联
-        List<ParamMap> paramMaps = paramsResolver.resolverParameters(parameters,joinPoint.getArgs());
+        //解析入参属性
+        List<ParamMap> paramMaps = paramsResolver.resolverParameters(parameters);
 
         Map<String, CacheIndex> indexMap = cacheIndices.stream()
                 .collect(Collectors.toMap(CacheIndex::getName, Function.identity()));
