@@ -18,7 +18,7 @@ public class IndexResolver {
 
 
 
-    public List<Expression> resolverAllIndex(List<ParamMap> paramMaps, Map<String, CacheIndex> indexMap,String prefix){
+    public List<Expression> resolverAllIndex(List<ParamMap> paramMaps, Map<String, CacheIndex> indexMap,final String prefix){
 
         //入参所关联的普通索引
         List<ParamMap> normal = paramMaps.stream()
