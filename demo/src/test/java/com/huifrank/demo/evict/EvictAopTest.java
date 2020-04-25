@@ -29,7 +29,7 @@ public class EvictAopTest {
     @Test
     public void testEvict(){
 
-        bankCardDal.updateByCardNoAndType("cardNo_13123","cardType_D");
+        bankCardDal.delByCardNoAndType("cardNo_13123","cardType_D");
         Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->bankCard:cardNo:[0])")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:id:(->bankCard:cardNo:[0])).indexCardId")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:mobile:(->bankCard:id:(->bankCard:cardNo:[0])).mobile"))
@@ -39,7 +39,7 @@ public class EvictAopTest {
     @Test
     public void testEvictMobile(){
 
-        bankCardDal.updateByCardNoAndMobile("cardNo_13123","mobile_13223");
+        bankCardDal.delByCardNoAndMobile("cardNo_13123","mobile_13223");
         Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->bankCard:cardNo:[0])")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:mobile:[1])"))
         );
@@ -49,7 +49,7 @@ public class EvictAopTest {
     @Test
     public void testEvictId(){
 
-        bankCardDal.updateById("1","13223422312");
+        bankCardDal.delById("1","13223422312");
         Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:[0]")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:mobile:[1])")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:cardNo:(->bankCard:id:[0]).cardNo"))
@@ -59,7 +59,7 @@ public class EvictAopTest {
     @Test
     public void testEvictIdOnly(){
 
-        bankCardDal.updateById("id_1");
+        bankCardDal.delById("id_1");
         Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:[0]")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:id:[0]).indexCardId")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:mobile:(->bankCard:id:[0]).mobile")),
@@ -71,7 +71,7 @@ public class EvictAopTest {
     @Test
     public void testEvictIdAndName(){
 
-        bankCardDal.updateByIdAndName("id_123456","name_123456");
+        bankCardDal.delByIdAndName("id_123456","name_123456");
         Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:[0]")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:id:[0]).indexCardId")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:mobile:(->bankCard:id:[0]).mobile")),
@@ -83,7 +83,7 @@ public class EvictAopTest {
     @Test
     public void testEvictMobileAndCardNo(){
 
-        bankCardDal.updateByMobileAndCardNo("cardNo_123456","mobile_123456");
+        bankCardDal.delByMobileAndCardNo("cardNo_123456","mobile_123456");
         Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->bankCard:cardNo:[0])")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:mobile:[1])"))
         );
@@ -92,7 +92,7 @@ public class EvictAopTest {
     @Test
     public void testEvictByMobileOnly(){
 
-        bankCardDal.updateByMobile("mobile_123456");
+        bankCardDal.delByMobile("mobile_123456");
         Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:mobile:[0])")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->bankCard:indexCardId:(->bankCard:mobile:[0])).id")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:cardNo:(->bankCard:indexCardId:(->bankCard:mobile:[0])).cardNo"))

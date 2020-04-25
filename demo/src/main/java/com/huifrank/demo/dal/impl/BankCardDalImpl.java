@@ -15,15 +15,7 @@ public class BankCardDalImpl implements BankCardDal {
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
     @Override
-    public int updateById(Long id){
-
-        return 0;
-    }
-
-    @Evict
-    @CacheFor(bufferEntity = BankCard.class)
-    @Override
-    public int updateByCardNoAndType(@Field("cardNo") String cardNo,@Field("cardType") String type){
+    public int delByCardNoAndType(@Field("cardNo") String cardNo,@Field("cardType") String type){
         //索引列表 ,入参属性 group
 
         return 0;
@@ -32,7 +24,7 @@ public class BankCardDalImpl implements BankCardDal {
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
     @Override
-    public int updateByCardNoAndMobile(@Field("cardNo") String cardNo, String mobile){
+    public int delByCardNoAndMobile(@Field("cardNo") String cardNo, String mobile){
         //索引列表 ,入参属性 group
 
         return 0;
@@ -41,34 +33,34 @@ public class BankCardDalImpl implements BankCardDal {
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
     @Override
-    public int updateById(String id, String mobile) {
+    public int delById(String id, String mobile) {
         return 0;
     }
 
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
     @Override
-    public int updateById(String id) {
+    public int delById(String id) {
         return 0;
     }
 
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
     @Override
-    public int updateByIdAndName(String id, String name) {
+    public int delByIdAndName(String id, String name) {
         return 0;
     }
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
     @Override
-    public int updateByMobileAndCardNo(String cardNo, String mobile) {
+    public int delByMobileAndCardNo(String cardNo, String mobile) {
         return 0;
     }
 
     @Override
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
-    public int updateByMobile(String mobile) {
+    public int delByMobile(String mobile) {
         return 0;
     }
 

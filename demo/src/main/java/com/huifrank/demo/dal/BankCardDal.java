@@ -6,19 +6,18 @@ import com.huifrank.annotation.action.Evict;
 import com.huifrank.demo.entity.BankCard;
 
 public interface BankCardDal {
-    int updateById(Long id);
 
-    int updateByCardNoAndType(@Field("cardNo") String cardNo, @Field("cardType") String type);
+    int delByCardNoAndType(@Field("cardNo") String cardNo, @Field("cardType") String type);
 
-    int updateByCardNoAndMobile(@Field("cardNo") String cardNo, String mobile);
+    int delByCardNoAndMobile(@Field("cardNo") String cardNo, String mobile);
 
-    int updateById(@Field("id") String id, String mobile);
+    int delById(@Field("id") String id, String mobile);
 
-    int updateById(@Field("id") String id );
+    int delById(@Field("id") String id );
 
-    int updateByIdAndName(String id, String name);
+    int delByIdAndName(String id, String name);
 
-    int updateByMobileAndCardNo(String mobile, String cardNo);
+    int delByMobileAndCardNo(String mobile, String cardNo);
 
-    int updateByMobile(String mobile );
+    int delByMobile(String mobile );
 }
