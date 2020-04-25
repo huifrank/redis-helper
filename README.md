@@ -62,7 +62,7 @@ bankCard:mobile:{mobile}              ->  {bankCard.indexCardId}
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
     @Override
-    public int updateById(String id) {
+    public int delById(String id) {
         //code
     }
 ```
@@ -79,7 +79,7 @@ bankCard:mobile:{mobile}              ->  {bankCard.indexCardId}
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
     @Override
-    public int updateByCardNoAndMobile(@Field("cardNo") String cardNo, String mobile){
+    public int delByCardNoAndMobile(@Field("cardNo") String cardNo, String mobile){
         //code
     }
 ```
@@ -93,7 +93,7 @@ bankCard:mobile:{mobile}              ->  {bankCard.indexCardId}
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
     @Override
-    public int updateByCardNoAndType(@Field("cardNo") String cardNo,@Field("cardType") String type){
+    public int delByCardNoAndType(@Field("cardNo") String cardNo,@Field("cardType") String type){
         //code
     }
 ```
