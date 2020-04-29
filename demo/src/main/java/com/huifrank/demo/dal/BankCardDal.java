@@ -2,6 +2,7 @@ package com.huifrank.demo.dal;
 
 import com.huifrank.annotation.CacheFor;
 import com.huifrank.annotation.Field;
+import com.huifrank.annotation.Where;
 import com.huifrank.annotation.action.Evict;
 import com.huifrank.demo.entity.BankCard;
 
@@ -20,4 +21,10 @@ public interface BankCardDal {
     int delByMobileAndCardNo(String mobile, String cardNo);
 
     int delByMobile(String mobile );
+
+    int update(BankCard card);
+
+    @CacheFor(bufferEntity = BankCard.class)
+    @Where(fields = {"id"})
+    int updateNameById(String name, String id);
 }

@@ -3,6 +3,7 @@ package com.huifrank.demo.dal.impl;
 import com.huifrank.annotation.CacheFor;
 import com.huifrank.annotation.Field;
 import com.huifrank.annotation.action.Evict;
+import com.huifrank.annotation.action.Update;
 import com.huifrank.demo.dal.BankCardDal;
 import com.huifrank.demo.entity.BankCard;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,21 @@ public class BankCardDalImpl implements BankCardDal {
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
     public int delByMobile(String mobile) {
+        return 0;
+    }
+
+    @Override
+    @CacheFor(bufferEntity = BankCard.class)
+    @Update(where = {"card.id"})
+    public int update(BankCard card){
+        return 0;
+    }
+
+    @Override
+    @CacheFor(bufferEntity = BankCard.class)
+    @Update(where = {"id"})
+    public int updateNameById(String name, String id){
+
         return 0;
     }
 
