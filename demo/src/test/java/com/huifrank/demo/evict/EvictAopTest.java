@@ -3,6 +3,7 @@ package com.huifrank.demo.evict;
 import com.huifrank.core.executor.DeleteExe4Test;
 import com.huifrank.demo.RedisHelperDemoRunner;
 import com.huifrank.demo.dal.BankCardDal;
+import com.huifrank.demo.entity.BankCard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +92,20 @@ public class EvictAopTest {
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:cardNo:(->bankCard:indexCardId:(->bankCard:mobile:[0])).cardNo"))
         );
         Assertions.assertEquals(3,exe4Test.expSize());
+    }
+
+    @Test
+    public void testEvictObj(){
+        BankCard bankCard = new BankCard();
+        bankCard.setId(1L);
+        bankCardDal.delObj(bankCard);
+
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:[0.id]")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:id:[0.id]).indexCardId")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:mobile:(->bankCard:id:[0.id]).mobile")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:cardNo:(->bankCard:id:[0.id]).cardNo"))
+        );
+        Assertions.assertEquals(4,exe4Test.expSize());
     }
 
 

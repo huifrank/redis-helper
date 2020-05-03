@@ -11,7 +11,7 @@ public class Term {
 
     private String indexName;
 
-    private Integer valueIndex;
+    private String valueIndex;
 
     private String refBeforeName;
 

@@ -9,7 +9,7 @@ public class ParamMap {
 
     private String name;
 
-    private int index;
+    private String index;
 
     private String valueTypeName;
 
