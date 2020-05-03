@@ -117,7 +117,7 @@ public class EvictAopTest {
         bankCard.setCardNo("123123");
         bankCardDal.delObjByCardNoAndMobile(bankCard);
         Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->bankCard:cardNo:[0.cardNo])")),
-                ()->Assertions.assertTrue(exe4Test.containsExp("-->bankCard:indexCardId:(->bankCard:mobile:[0.mobile])"))
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:mobile:[0.mobile])"))
         );
         Assertions.assertEquals(2,exe4Test.expSize());
 
