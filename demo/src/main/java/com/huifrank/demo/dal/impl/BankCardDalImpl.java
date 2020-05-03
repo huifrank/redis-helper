@@ -68,7 +68,14 @@ public class BankCardDalImpl implements BankCardDal {
     @Override
     @Evict(where = "bankCard.id")
     @CacheFor(bufferEntity = BankCard.class)
-    public int delObj(BankCard bankCard) {
+    public int delObjById(BankCard bankCard) {
+        return 0;
+    }
+
+    @Override
+    @Evict(where = {"bankCard.cardNo","bankCard.mobile"})
+    @CacheFor(bufferEntity = BankCard.class)
+    public int delObjByCardNoAndMobile(BankCard bankCard) {
         return 0;
     }
 

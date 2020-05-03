@@ -98,7 +98,7 @@ public class EvictAopTest {
     public void testEvictObj(){
         BankCard bankCard = new BankCard();
         bankCard.setId(1L);
-        bankCardDal.delObj(bankCard);
+        bankCardDal.delObjById(bankCard);
 
         Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:[0.id]")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->bankCard:id:[0.id]).indexCardId")),
@@ -106,6 +106,21 @@ public class EvictAopTest {
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:cardNo:(->bankCard:id:[0.id]).cardNo"))
         );
         Assertions.assertEquals(4,exe4Test.expSize());
+    }
+
+
+    @Test
+    public void testDelObjByCardNoAndMobile(){
+        BankCard bankCard = new BankCard();
+        bankCard.setId(1L);
+        bankCard.setMobile("mobile_123123");
+        bankCard.setCardNo("123123");
+        bankCardDal.delObjByCardNoAndMobile(bankCard);
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->bankCard:cardNo:[0.cardNo])")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("-->bankCard:indexCardId:(->bankCard:mobile:[0.mobile])"))
+        );
+        Assertions.assertEquals(2,exe4Test.expSize());
+
     }
 
 
