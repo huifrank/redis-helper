@@ -3,6 +3,7 @@ package com.huifrank.core.action;
 
 import com.huifrank.annotation.BufferEntity;
 import com.huifrank.annotation.CacheFor;
+import com.huifrank.annotation.action.Evict;
 import com.huifrank.core.context.CacheContext;
 import com.huifrank.core.executor.DeleteExe4Test;
 import com.huifrank.core.executor.DeleteOpsExe;
@@ -56,6 +57,7 @@ public class EvictAction {
 
         //未命中缓存，重新解析
         CacheFor cacheFor = method.getAnnotation(CacheFor.class);
+        Evict evict = method.getAnnotation(Evict.class);
         //缓存实体
         Class entity = cacheFor.bufferEntity();
 
@@ -68,7 +70,7 @@ public class EvictAction {
                 .collect(Collectors.toMap(CacheIndex::getName, Function.identity()));
 
         //解析入参属性
-        List<ParamMap> paramMaps = cacheContext.getParamMaps(method,methodCode);
+        List<ParamMap> paramMaps = cacheContext.getParamMaps(method,methodCode,evict.where());
 
         expressions = indexResolver.resolverAllIndex(paramMaps, indexMap, prefix);
 

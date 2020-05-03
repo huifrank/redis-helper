@@ -38,10 +38,13 @@ public class CacheContext {
         return cacheIndices;
     }
 
-    public List<ParamMap> getParamMaps(Method method,String key){
+    /**
+     * 解析入参
+     */
+    public List<ParamMap> getParamMaps(Method method,String key,String[] where){
         List<ParamMap> paramMaps = paramMapsCache.get(key);
         if(paramMaps == null){
-            paramMaps = paramsResolver.resolverParameters(method.getParameters());
+            paramMaps = paramsResolver.resolverParameters(method.getParameters(),where);
             paramMapsCache.put(key,paramMaps);
         }
         return paramMaps;
