@@ -80,6 +80,13 @@ public class BankCardDalImpl implements BankCardDal {
     }
 
     @Override
+    @Evict(where = {"bankCard.cardNo","mobile"})
+    @CacheFor(bufferEntity = BankCard.class)
+    public int delObjByCardNoAndMobile(BankCard bankCard,String mobile) {
+        return 0;
+    }
+
+    @Override
     @CacheFor(bufferEntity = BankCard.class)
     @Update(where = {"card.id"})
     public int update(BankCard card){
@@ -90,6 +97,14 @@ public class BankCardDalImpl implements BankCardDal {
     @CacheFor(bufferEntity = BankCard.class)
     @Update(where = {"id"})
     public int updateNameById(BankCard card, String id){
+
+        return 0;
+    }
+
+    @Override
+    @CacheFor(bufferEntity = BankCard.class)
+    @Update(where = {"id"})
+    public int updateNameById(String name, String id){
 
         return 0;
     }

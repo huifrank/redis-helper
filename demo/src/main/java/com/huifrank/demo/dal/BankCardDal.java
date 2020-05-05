@@ -24,11 +24,13 @@ public interface BankCardDal {
 
     int delObjById(BankCard bankCard);
 
-    @Evict(where = {"bankCard.cardNo","bankCard.mobile"})
-    @CacheFor(bufferEntity = BankCard.class)
     int delObjByCardNoAndMobile(BankCard bankCard);
+
+    int delObjByCardNoAndMobile(BankCard bankCard, String mobile);
 
     int update(BankCard card);
 
     int updateNameById(BankCard card, String id);
+
+    int updateNameById(String name, String id);
 }

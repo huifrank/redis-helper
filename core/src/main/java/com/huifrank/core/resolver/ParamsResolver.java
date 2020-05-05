@@ -24,7 +24,9 @@ public class ParamsResolver {
         return IntStream.range(0,parameters.length).mapToObj(index ->{
             Parameter p = parameters[index];
             Field annotation = p.getAnnotation(Field.class);
+            //如果没有用@Field的话，就取变量名
             String name = annotation == null ? p.getName() : annotation.value();
+            //过滤出符合当前name的where条件变量
             List<String> select = selectWhere(name, where);
 
             if(CollectionUtils.isEmpty(select)){
@@ -33,6 +35,9 @@ public class ParamsResolver {
 
             Stream<ParamMap> paramMapStream = select.stream()
                     .map(c -> {
+                        if(c.indexOf(".") == -1){
+                            return new ParamMap(name,String.valueOf(index),p.getType().getTypeName());
+                        }
                         String subName = c.substring(c.indexOf(".")+1);
                         return new ParamMap(subName, index +"."+ subName, p.getType().getTypeName());
                     });
