@@ -104,3 +104,16 @@ bankCard:mobile:{mobile}              ->  {bankCard.indexCardId}
 ->bankCard:indexCardId:(bankCard:id:(bankCard:cardNo:{cardNo})).indexCardId
 ->bankCard:mobile:(bankCard:id:(bankCard:cardNo:{cardNo})).mobile
 ```
+
+关于update 和 put 操作还没想好怎么实现。
+
+大概分几种情况吧：
+### update
+1 更新的时候dal层传入整个DO对象，对象里面所有值都有值，用where指定更新范围。
+    
+    *这种方式应该是用起来最难受的，但是切面实现起来简单*
+2 只传要更新的值，用where指定更新范围。
+    
+    *这样怎么去更新缓存是个问题，不能保证where中关联的key在缓存中一定有值，可以没值的话直接降级为删除缓存？*
+### put
+1 put应该只能传入完整的DO对象。    
