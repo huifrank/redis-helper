@@ -30,6 +30,8 @@ public interface BankCardDal {
 
     int update(BankCard card);
 
+    int put(BankCard card);
+
     int updateNameById(BankCard card, String id);
 
     int updateNameById(String name, String id);

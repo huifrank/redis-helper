@@ -3,6 +3,7 @@ package com.huifrank.demo.dal.impl;
 import com.huifrank.annotation.CacheFor;
 import com.huifrank.annotation.Field;
 import com.huifrank.annotation.action.Evict;
+import com.huifrank.annotation.action.Put;
 import com.huifrank.annotation.action.Update;
 import com.huifrank.demo.dal.BankCardDal;
 import com.huifrank.demo.entity.BankCard;
@@ -90,6 +91,13 @@ public class BankCardDalImpl implements BankCardDal {
     @CacheFor(bufferEntity = BankCard.class)
     @Update(where = {"card.id"})
     public int update(BankCard card){
+        return 0;
+    }
+
+    @Override
+    @CacheFor(bufferEntity = BankCard.class)
+    @Put
+    public int put(BankCard card) {
         return 0;
     }
 

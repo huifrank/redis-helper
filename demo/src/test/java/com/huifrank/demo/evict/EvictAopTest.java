@@ -136,13 +136,7 @@ public class EvictAopTest {
 
     }
 
-    @Test
-    public void testSimpleUpdate(){
-        BankCard bankCard = new BankCard();
-        bankCard.setId(1L);
-        bankCard.setCardNo("123123");
-        bankCardDal.update(bankCard);
-    }
+
 
 
 }
