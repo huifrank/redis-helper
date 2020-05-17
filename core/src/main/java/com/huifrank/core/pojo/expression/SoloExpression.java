@@ -4,6 +4,9 @@ import com.huifrank.core.CacheIndexType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * 由单个参数组成的表达式
@@ -20,4 +23,19 @@ public abstract class SoloExpression implements Expression {
     private String name;
 
     private CacheIndexType cacheIndexType;
+
+
+    /**
+     * 获取当前Exp所关联的索引属性名
+     * @return
+     */
+    public List<String> getExpNames(){
+        List<String> curNames = new ArrayList<>();
+        if(getTerm().getBefore() != null){
+            curNames.addAll(getTerm().getBefore().getExpNames());
+        }
+        curNames.add(getName());
+        return curNames;
+    }
+
 }

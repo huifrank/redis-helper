@@ -13,32 +13,19 @@ public class GetExpression extends SoloExpression{
 
 
     @Override
-    public String toString(){
+    public String toString() {
 
-        if(getTerm().getBefore() != null) {
-            if(getTerm().getRefBeforeName() != null){
-                return  "->" + getTerm() + "(" +getTerm().getBefore() + ")."+getTerm().getRefBeforeName();
+        if (getTerm().getBefore() != null) {
+            if (getTerm().getRefBeforeName() != null) {
+                return "->" + getTerm() + "(" + getTerm().getBefore() + ")." + getTerm().getRefBeforeName();
             }
-            return   "->" + getTerm() + "(" + getTerm().getBefore() + ")";
-        }else {
-            return   "->" + getTerm();
+            return "->" + getTerm() + "(" + getTerm().getBefore() + ")";
+        } else {
+            return "->" + getTerm();
         }
-
     }
 
 
-    /**
-     * 获取当前Exp所关联的索引属性名
-     * @return
-     */
-    public List<String> getExpNames(){
-        List<String> curNames = new ArrayList<>();
-        if(getTerm().getBefore() != null){
-            curNames.addAll(getTerm().getBefore().getExpNames());
-        }
-        curNames.add(getName());
-        return curNames;
-    }
 
     @Override
     public Type ExpressionType() {

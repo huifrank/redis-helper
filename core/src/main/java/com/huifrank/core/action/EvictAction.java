@@ -9,6 +9,7 @@ import com.huifrank.core.executor.DeleteExe4Test;
 import com.huifrank.core.executor.DeleteOpsExe;
 import com.huifrank.core.executor.ops.DelOps;
 import com.huifrank.core.pojo.expression.GetExpression;
+import com.huifrank.core.pojo.expression.SoloExpression;
 import com.huifrank.core.resolver.IndexResolver;
 import com.huifrank.core.pojo.CacheIndex;
 import com.huifrank.core.pojo.ParamMap;
@@ -46,7 +47,7 @@ public class EvictAction {
         Method method = signature.getMethod();
         String methodCode = "evict@"+cacheContext.getMethodSignature(method);
 
-        List<GetExpression> getExpressions = cacheContext.getExpressionsCacheOnly(methodCode);
+        List<SoloExpression> getExpressions = cacheContext.getExpressionsCacheOnly(methodCode);
         if(getExpressions != null){
             return proceedAndExecute(getExpressions,joinPoint);
         }
@@ -76,7 +77,7 @@ public class EvictAction {
 
     }
 
-    private Object proceedAndExecute(List<GetExpression> getExpressions, ProceedingJoinPoint joinPoint) throws Throwable {
+    private Object proceedAndExecute(List<SoloExpression> getExpressions, ProceedingJoinPoint joinPoint) throws Throwable {
         //执行原方法
         Object proceed = joinPoint.proceed();
         List<DelOps> opsList = getExpressions.stream().map(o-> new DelOps(o)).collect(Collectors.toList());

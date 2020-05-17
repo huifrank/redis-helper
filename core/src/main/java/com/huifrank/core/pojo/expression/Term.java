@@ -15,7 +15,7 @@ public class Term {
 
     private String refBeforeName;
 
-    private GetExpression before;
+    private SoloExpression before;
 
 
     public Term(String indexName){

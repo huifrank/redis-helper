@@ -10,6 +10,7 @@ import com.huifrank.core.executor.ops.DelOps;
 import com.huifrank.core.pojo.CacheIndex;
 import com.huifrank.core.pojo.expression.GetExpression;
 import com.huifrank.core.pojo.ParamMap;
+import com.huifrank.core.pojo.expression.SoloExpression;
 import com.huifrank.core.resolver.IndexResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -47,7 +48,7 @@ public class UpdateAction {
         Method method = signature.getMethod();
         String methodCode = "update@" + cacheContext.getMethodSignature(method);
 
-        List<GetExpression> getExpressions = cacheContext.getExpressionsCacheOnly(methodCode);
+        List<SoloExpression> getExpressions = cacheContext.getExpressionsCacheOnly(methodCode);
 
         if(getExpressions != null){
             return proceedAndExecute(getExpressions,joinPoint);
@@ -76,7 +77,7 @@ public class UpdateAction {
         return proceedAndExecute(getExpressions,joinPoint);
     }
 
-    private Object proceedAndExecute(List<GetExpression> getExpressions, ProceedingJoinPoint joinPoint) throws Throwable {
+    private Object proceedAndExecute(List<SoloExpression> getExpressions, ProceedingJoinPoint joinPoint) throws Throwable {
         //执行原方法
         Object proceed = joinPoint.proceed();
         List<DelOps> opsList = getExpressions.stream().map(o-> new DelOps(o)).collect(Collectors.toList());

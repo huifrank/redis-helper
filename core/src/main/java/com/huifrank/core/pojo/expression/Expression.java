@@ -10,5 +10,6 @@ public interface Expression {
         PUT,
         MERGE,
         DEL,
+        GET_DEL,
     }
 }

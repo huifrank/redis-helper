@@ -3,8 +3,10 @@ package com.huifrank.core.resolver;
 import com.huifrank.core.context.CacheContext;
 import com.huifrank.core.CacheIndexType;
 import com.huifrank.core.pojo.CacheIndex;
+import com.huifrank.core.pojo.expression.GetDelExpression;
 import com.huifrank.core.pojo.expression.GetExpression;
 import com.huifrank.core.pojo.ParamMap;
+import com.huifrank.core.pojo.expression.SoloExpression;
 import com.huifrank.core.pojo.expression.Term;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +20,7 @@ public class IndexResolver {
 
 
 
-    public List<GetExpression> resolverAllIndex(List<ParamMap> paramMaps, Map<String, CacheIndex> indexMap, final String prefix){
+    public List<SoloExpression> resolverAllIndex(List<ParamMap> paramMaps, Map<String, CacheIndex> indexMap, final String prefix){
 
         //入参所关联的普通索引
         List<ParamMap> normal = paramMaps.stream()
@@ -36,7 +38,7 @@ public class IndexResolver {
                 .filter(p -> CacheIndexType.ClusterIndex.equals(p.getValue().getIndexType()))
                 .map(p -> p.getValue()).collect(Collectors.toList());
 
-        List<GetExpression> byNormalKeys = normal.stream().map(p -> normalIndexWithRef(prefix, clusterType, p,indexMap))
+        List<SoloExpression> byNormalKeys = normal.stream().map(p -> normalIndexWithRef(prefix, clusterType, p,indexMap))
                 .collect(Collectors.toList());
 
         List<GetExpression> byClusterKeys = cluster.stream().map(p -> clusterIndex(prefix, clusterType, p))
@@ -44,7 +46,7 @@ public class IndexResolver {
                 .collect(Collectors.toList());
 
 
-        List<GetExpression> res = new ArrayList<>();
+        List<SoloExpression> res = new ArrayList<>();
         res.addAll(byClusterKeys);
         res.addAll(byNormalKeys);
 
@@ -54,13 +56,14 @@ public class IndexResolver {
     }
 
 
-    private void complementOtherIndex(final String prefix, List<GetExpression> curExp, Map<String, CacheIndex> indexMap){
+    private void complementOtherIndex(final String prefix, List<SoloExpression> curExp, Map<String, CacheIndex> indexMap){
 
-        GetExpression first = curExp.stream()
+        SoloExpression first = curExp.stream()
                 .filter(c -> CacheIndexType.ClusterIndex.equals(c.getCacheIndexType()))
                 .findFirst().orElseThrow(()->new RuntimeException("普通索引必须关联有聚簇索引"));
+        GetDelExpression getDelExpression = GetDelExpression.of(first);
         List<String> allFieldNames = curExp.stream()
-                .map(GetExpression::getExpNames)
+                .map(SoloExpression::getExpNames)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
@@ -73,9 +76,9 @@ public class IndexResolver {
             CacheIndex cacheIndex = indexMap.get(name);
             switch (cacheIndex.getIndexType()) {
                 case ClusterIndex:
-                    return complementClusterIndexByCluster(prefix, Collections.singletonList(cacheIndex), first,name).get(0);
+                    return complementClusterIndexByCluster(prefix, Collections.singletonList(cacheIndex), getDelExpression,name).get(0);
                 case NormalIndex:
-                    return complementNormalIndexByCluster(prefix, first,name );
+                    return complementNormalIndexByCluster(prefix, getDelExpression,name );
                 default:
                     throw new RuntimeException("不支持的索引类型");
             }
@@ -88,7 +91,7 @@ public class IndexResolver {
     }
 
 
-    private GetExpression complementNormalIndexByCluster(final String prefix, GetExpression before, String refName){
+    private GetExpression complementNormalIndexByCluster(final String prefix, GetDelExpression before, String refName){
 
 
         String normal = prefix+ CacheContext.CACHE_SPLIT+refName+CacheContext.CACHE_SPLIT;
@@ -104,12 +107,12 @@ public class IndexResolver {
     /**
      * 仅普通索引，不做关联
      */
-    private GetExpression normalIndexOnly(final String prefix, ParamMap curParam){
+    private GetDelExpression normalIndexOnly(final String prefix, ParamMap curParam){
 
 
         String normal = prefix+CacheContext. CACHE_SPLIT+curParam.getName()+CacheContext.CACHE_SPLIT;
 
-        GetExpression before = new GetExpression();
+        GetDelExpression before = new GetDelExpression();
         before.setTerm(new Term(normal).setValueIndex(curParam.getIndex()))
                 .setCacheIndexType(CacheIndexType.NormalIndex)
                 .setName(curParam.getName());
@@ -129,7 +132,7 @@ public class IndexResolver {
                 .get(cacheIndex.getRefIndex());
         String cluster = prefix+ CacheContext. CACHE_SPLIT+clusterType.getName()+CacheContext.CACHE_SPLIT;
 
-        GetExpression before = normalIndexOnly(prefix,curParam);
+        GetDelExpression before = normalIndexOnly(prefix,curParam);
         //关联到聚簇索引
         GetExpression getExpression = new GetExpression();
         getExpression.setTerm(new Term(cluster).setBefore(before))
@@ -140,7 +143,7 @@ public class IndexResolver {
         return getExpression;
     }
 
-    private List<GetExpression> complementClusterIndexByCluster(final String prefix, List<CacheIndex> clusterIndex, GetExpression before, String refName){
+    private List<GetExpression> complementClusterIndexByCluster(final String prefix, List<CacheIndex> clusterIndex, GetDelExpression before, String refName){
         Map<String, CacheIndex> clusterMap = clusterIndex.stream().collect(Collectors.toMap(CacheIndex::getName, Function.identity()));
         CacheIndex clu = clusterMap.get(refName);
         String cluster = prefix+ CacheContext.CACHE_SPLIT+clu.getName()+CacheContext.CACHE_SPLIT;
