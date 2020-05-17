@@ -1,17 +1,16 @@
 package com.huifrank.core.action;
 
-
 import com.huifrank.annotation.BufferEntity;
 import com.huifrank.annotation.CacheFor;
-import com.huifrank.annotation.action.Evict;
+import com.huifrank.annotation.action.Update;
 import com.huifrank.core.context.CacheContext;
 import com.huifrank.core.executor.DeleteExe4Test;
 import com.huifrank.core.executor.DeleteOpsExe;
 import com.huifrank.core.executor.ops.DelOps;
-import com.huifrank.core.pojo.expression.GetExpression;
-import com.huifrank.core.resolver.IndexResolver;
 import com.huifrank.core.pojo.CacheIndex;
+import com.huifrank.core.pojo.expression.GetExpression;
 import com.huifrank.core.pojo.ParamMap;
+import com.huifrank.core.resolver.IndexResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -25,11 +24,14 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
+/**
+ * 更新缓存
+ */
 @Aspect
 @Service
 @Slf4j
-public class EvictAction {
+public class UpdateAction {
+
 
 
     IndexResolver indexResolver = new IndexResolver();
@@ -39,41 +41,39 @@ public class EvictAction {
     CacheContext cacheContext = new CacheContext();
 
 
-    @Around(value = "@annotation(com.huifrank.annotation.action.Evict)")
-    public Object doEvictAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
-
+    @Around(value = "@annotation(com.huifrank.annotation.action.Update)")
+    public Object doUpdateAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
-        String methodCode = "evict@"+cacheContext.getMethodSignature(method);
+        String methodCode = "update@" + cacheContext.getMethodSignature(method);
 
         List<GetExpression> getExpressions = cacheContext.getExpressionsCacheOnly(methodCode);
+
         if(getExpressions != null){
             return proceedAndExecute(getExpressions,joinPoint);
         }
-
         //未命中缓存，重新解析
         CacheFor cacheFor = method.getAnnotation(CacheFor.class);
-        Evict evict = method.getAnnotation(Evict.class);
+        Update update = method.getAnnotation(Update.class);
         //缓存实体
         Class entity = cacheFor.bufferEntity();
-
         BufferEntity bufferEntity = (BufferEntity) entity.getAnnotation(BufferEntity.class);
         //索引前缀
         String prefix = bufferEntity.keyPrefix();
-        //当前前缀索引列表
+
         List<CacheIndex> cacheIndices = cacheContext.getCacheIndex(entity);
+        List<ParamMap> paramMaps = cacheContext.getParamMaps(method,methodCode,update.where());
+
         Map<String, CacheIndex> indexMap = cacheIndices.stream()
                 .collect(Collectors.toMap(CacheIndex::getName, Function.identity()));
 
-        //解析入参属性
-        List<ParamMap> paramMaps = cacheContext.getParamMaps(method,methodCode,evict.where());
-
         getExpressions = indexResolver.resolverAllIndex(paramMaps, indexMap, prefix);
 
-        cacheContext.addExpressionsCache(methodCode, getExpressions);
+
+
+
 
         return proceedAndExecute(getExpressions,joinPoint);
-
     }
 
     private Object proceedAndExecute(List<GetExpression> getExpressions, ProceedingJoinPoint joinPoint) throws Throwable {
@@ -84,6 +84,4 @@ public class EvictAction {
 
         return proceed;
     }
-
-
 }

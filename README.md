@@ -116,4 +116,4 @@ bankCard:mobile:{mobile}              ->  {bankCard.indexCardId}
     
     *这样怎么去更新缓存是个问题，不能保证where中关联的key在缓存中一定有值，可以没值的话直接降级为删除缓存？*
 ### put
-1 put应该只能传入完整的DO对象。    
+1 put只能传入完整的DO对象。    

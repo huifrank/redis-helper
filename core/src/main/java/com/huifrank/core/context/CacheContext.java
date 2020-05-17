@@ -1,7 +1,8 @@
 package com.huifrank.core.context;
 
 import com.huifrank.core.pojo.CacheIndex;
-import com.huifrank.core.pojo.Expression;
+import com.huifrank.core.pojo.expression.Expression;
+import com.huifrank.core.pojo.expression.GetExpression;
 import com.huifrank.core.pojo.ParamMap;
 import com.huifrank.core.resolver.BufferEntityResolver;
 import com.huifrank.core.resolver.ParamsResolver;
@@ -23,7 +24,7 @@ public class CacheContext {
 
     private static Map<String, List<CacheIndex>> entityIndexCache = new ConcurrentHashMap<>();
     private static Map<String, List<ParamMap>> paramMapsCache = new ConcurrentHashMap<>();
-    private static Map<String,List<Expression>> expressionCache = new ConcurrentHashMap<>();
+    private static Map<String,List<GetExpression>> expressionCache = new ConcurrentHashMap<>();
 
 
 
@@ -51,12 +52,12 @@ public class CacheContext {
 
     }
 
-    public List<Expression> getExpressionsCacheOnly(String key){
-        List<Expression> expressions = expressionCache.get(key);
-        return expressions;
+    public List<GetExpression> getExpressionsCacheOnly(String key){
+        List<GetExpression> getExpressions = expressionCache.get(key);
+        return getExpressions;
     }
-    public void addExpressionsCache(String key,List<Expression> expressions){
-        expressionCache.put(key, expressions );
+    public void addExpressionsCache(String key,List<GetExpression> getExpressions){
+        expressionCache.put(key, getExpressions);
     }
 
     /**

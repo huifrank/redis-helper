@@ -25,7 +25,7 @@ public class DeleteExe4Test implements DeleteOpsExe{
 
     @Override
     public void execute(List<DelOps> opsList) {
-        exp = opsList.stream().map(f-> f.getExpression().toString()).collect(Collectors.toList());
+        exp = opsList.stream().map(f-> f.getGetExpression().toString()).collect(Collectors.toList());
 
         exp.forEach(log::info);
     }

@@ -1,4 +1,4 @@
-package com.huifrank.core.pojo;
+package com.huifrank.core.pojo.expression;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ public class Term {
 
     private String refBeforeName;
 
-    private Expression before;
+    private GetExpression before;
 
 
     public Term(String indexName){
