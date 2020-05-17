@@ -33,15 +33,8 @@ public class GetDelExpression extends SoloExpression{
     }
 
     @Override
-    public String toString() {
-
-        if (getTerm().getBefore() != null) {
-            if (getTerm().getRefBeforeName() != null) {
-                return "->" + getTerm() + "(" + getTerm().getBefore() + ")." + getTerm().getRefBeforeName();
-            }
-            return "->" + getTerm() + "(" + getTerm().getBefore() + ")";
-        } else {
-            return "->" + getTerm();
-        }
+    public String toString(){
+        return super.toString();
     }
+
 }

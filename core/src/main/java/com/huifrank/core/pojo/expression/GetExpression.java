@@ -12,23 +12,15 @@ public class GetExpression extends SoloExpression{
 
 
 
-    @Override
-    public String toString() {
-
-        if (getTerm().getBefore() != null) {
-            if (getTerm().getRefBeforeName() != null) {
-                return "->" + getTerm() + "(" + getTerm().getBefore() + ")." + getTerm().getRefBeforeName();
-            }
-            return "->" + getTerm() + "(" + getTerm().getBefore() + ")";
-        } else {
-            return "->" + getTerm();
-        }
-    }
-
 
 
     @Override
     public Type ExpressionType() {
         return Type.GET;
+    }
+
+    @Override
+    public String toString(){
+        return super.toString();
     }
 }

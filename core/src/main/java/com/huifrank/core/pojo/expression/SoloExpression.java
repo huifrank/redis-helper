@@ -38,4 +38,17 @@ public abstract class SoloExpression implements Expression {
         return curNames;
     }
 
+    @Override
+    public String toString() {
+
+        if (getTerm().getBefore() != null) {
+            if (getTerm().getRefBeforeName() != null) {
+                return "->" + getTerm() + "(" + getTerm().getBefore() + ")." + getTerm().getRefBeforeName();
+            }
+            return "->" + getTerm() + "(" + getTerm().getBefore() + ")";
+        } else {
+            return "->" + getTerm();
+        }
+    }
+
 }

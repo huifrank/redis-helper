@@ -8,13 +8,15 @@ import lombok.experimental.Accessors;
 public class DelExpression extends SoloExpression{
 
 
-    private Term term;
-
-    private String name;
 
 
     @Override
     public Type ExpressionType() {
         return Type.DEL;
+    }
+
+    @Override
+    public String toString(){
+        return super.toString();
     }
 }
