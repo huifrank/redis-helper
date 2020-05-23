@@ -26,9 +26,15 @@ public class Term {
 
     @Override
     public String toString(){
-        if(valueIndex == null){
+        if(valueIndex != null && indexName != null) {
+            return indexName + "[" + valueIndex + "]";
+        }
+        if(valueIndex != null){
+            return "["+valueIndex+"]";
+        }
+        if(indexName != null){
             return indexName;
         }
-        return indexName+"["+valueIndex+"]";
+        return null;
     }
 }

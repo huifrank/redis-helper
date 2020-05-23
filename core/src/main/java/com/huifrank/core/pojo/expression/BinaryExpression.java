@@ -12,20 +12,20 @@ import lombok.experimental.Accessors;
 public abstract class BinaryExpression implements Expression{
 
 
-    private Term term;
+    private Term keyTerm;
 
     private String name;
 
     @Override
     public String toString() {
 
-        if (getTerm().getBefore() != null) {
-            if (getTerm().getRefBeforeName() != null) {
-                return "->" + getTerm() + "(" + getTerm().getBefore() + ")." + getTerm().getRefBeforeName();
+        if (getKeyTerm().getBefore() != null) {
+            if (getKeyTerm().getRefBeforeName() != null) {
+                return "->" + getKeyTerm() + "(" + getKeyTerm().getBefore() + ")." + getKeyTerm().getRefBeforeName();
             }
-            return "->" + getTerm() + "(" + getTerm().getBefore() + ")";
+            return "->" + getKeyTerm() + "(" + getKeyTerm().getBefore() + ")";
         } else {
-            return "->" + getTerm();
+            return "->" + getKeyTerm();
         }
     }
 

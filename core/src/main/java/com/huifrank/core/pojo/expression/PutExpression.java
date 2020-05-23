@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 public class PutExpression extends BinaryExpression {
 
 
-    private String paramIndex;
+    private ReflectTerm valueTerm;
 
 
     @Override
@@ -17,6 +17,6 @@ public class PutExpression extends BinaryExpression {
     }
     @Override
     public String toString(){
-        return super.toString();
+        return super.toString() + " # " + valueTerm;
     }
 }

@@ -87,21 +87,25 @@ public class PutAction {
     private PutExpression clusterIndex(final String prefix, CacheIndex clusterIndex, ParamMap curParam){
         PutExpression putExpression = new PutExpression();
         GetExpression before = new GetExpression();
-        before.setTerm(new Term("").setValueIndex("0"));
+        before.setTerm(new Term().setValueIndex("0"));
         String cluster = prefix+ CacheContext.CACHE_SPLIT+clusterIndex.getName()+CacheContext.CACHE_SPLIT;
-        putExpression.setTerm(new Term(cluster).setBefore(before).setRefBeforeName(clusterIndex.getName()))
+        putExpression.setKeyTerm(new Term(cluster).setBefore(before).setRefBeforeName(clusterIndex.getName()))
                 .setName(clusterIndex.getName());
+
+        putExpression.setValueTerm(new ReflectTerm().setFieldName(clusterIndex.getName()).setValueIndex(curParam.getIndex()));
 
         return putExpression;
 
     }
-    private PutExpression normalIndex(final String prefix, CacheIndex clusterIndex, ParamMap curParam){
+    private PutExpression normalIndex(final String prefix, CacheIndex normalIndex, ParamMap curParam){
         PutExpression putExpression = new PutExpression();
         GetExpression before = new GetExpression();
-        before.setTerm(new Term("").setValueIndex("0"));
-        String cluster = prefix+ CacheContext.CACHE_SPLIT+clusterIndex.getName()+CacheContext.CACHE_SPLIT;
-        putExpression.setTerm(new Term(cluster).setBefore(before).setRefBeforeName(clusterIndex.getName()))
-                .setName(clusterIndex.getName());
+        before.setTerm(new Term().setValueIndex("0"));
+        String cluster = prefix+ CacheContext.CACHE_SPLIT+normalIndex.getName()+CacheContext.CACHE_SPLIT;
+        putExpression.setKeyTerm(new Term(cluster).setBefore(before).setRefBeforeName(normalIndex.getName()))
+                .setName(normalIndex.getName());
+
+        putExpression.setValueTerm(new ReflectTerm().setFieldName(normalIndex.getName()).setValueIndex(curParam.getIndex()));
 
         return putExpression;
 

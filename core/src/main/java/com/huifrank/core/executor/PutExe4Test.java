@@ -1,6 +1,5 @@
 package com.huifrank.core.executor;
 
-import com.huifrank.core.executor.ops.DelOps;
 import com.huifrank.core.executor.ops.PutOps;
 import lombok.extern.slf4j.Slf4j;
 
