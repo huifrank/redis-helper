@@ -98,7 +98,7 @@ public class QueryAction {
                     getExpression = (clusterIndex(cacheIndex,param,prefix));
                     break;
                 case NormalIndex:
-                    getExpression =  (normalIndex(cacheIndex,param,prefix));
+                    getExpression =  normalIndex(cacheIndices,cacheIndex,param,prefix);
                     break;
             default: throw new RuntimeException("不支持的索引类型");
 
@@ -120,14 +120,23 @@ public class QueryAction {
         return before;
 
     }
-    public GetExpression normalIndex(CacheIndex cacheIndex , ParamMap param,String prefix){
+    public GetExpression normalIndex(List<CacheIndex>  cacheIndices,CacheIndex cacheIndex , ParamMap param,String prefix){
         String normal = prefix+ CacheContext.CACHE_SPLIT+cacheIndex.getName()+CacheContext.CACHE_SPLIT;
+
+        CacheIndex cluster = cacheIndices.stream().filter(c -> c.getName().equals(cacheIndex.getRefIndex())).findFirst().orElseThrow(()->new RuntimeException("普通索引必须关联有聚簇索引"));
+        String clusterName = prefix+ CacheContext. CACHE_SPLIT+cluster.getName() + CacheContext.CACHE_SPLIT;
+        GetExpression after = new GetExpression();
         GetExpression before = new GetExpression();
+
         before.setCacheTerm(new CacheTerm(normal).setValueIndex(param.getIndex()))
                 .setCacheIndexType(CacheIndexType.NormalIndex)
                 .setName(param.getName());
+        after.setCacheTerm(new CacheTerm(clusterName).setValueIndex(param.getIndex()).setBefore(before))
+                .setCacheIndexType(CacheIndexType.ClusterIndex)
+                .setName(cluster.getName());
 
-        return before;
+
+        return after;
     }
 
 
