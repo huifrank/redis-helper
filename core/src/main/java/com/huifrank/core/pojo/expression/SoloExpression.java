@@ -1,6 +1,7 @@
 package com.huifrank.core.pojo.expression;
 
 import com.huifrank.core.CacheIndexType;
+import com.huifrank.core.pojo.term.CacheTerm;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -18,7 +19,7 @@ import java.util.List;
 public abstract class SoloExpression implements Expression {
 
 
-    private Term term;
+    private CacheTerm cacheTerm;
 
     private String name;
 
@@ -31,8 +32,8 @@ public abstract class SoloExpression implements Expression {
      */
     public List<String> getExpNames(){
         List<String> curNames = new ArrayList<>();
-        if(getTerm().getBefore() != null){
-            curNames.addAll(getTerm().getBefore().getExpNames());
+        if(getCacheTerm().getBefore() != null){
+            curNames.addAll(getCacheTerm().getBefore().getExpNames());
         }
         curNames.add(getName());
         return curNames;
@@ -41,13 +42,13 @@ public abstract class SoloExpression implements Expression {
     @Override
     public String toString() {
 
-        if (getTerm().getBefore() != null) {
-            if (getTerm().getRefBeforeName() != null) {
-                return "->" + getTerm() + "(" + getTerm().getBefore() + ")." + getTerm().getRefBeforeName();
+        if (getCacheTerm().getBefore() != null) {
+            if (getCacheTerm().getRefBeforeName() != null) {
+                return "->" + getCacheTerm() + "(" + getCacheTerm().getBefore() + ")." + getCacheTerm().getRefBeforeName();
             }
-            return "->" + getTerm() + "(" + getTerm().getBefore() + ")";
+            return "->" + getCacheTerm() + "(" + getCacheTerm().getBefore() + ")";
         } else {
-            return "->" + getTerm();
+            return "->" + getCacheTerm();
         }
     }
 

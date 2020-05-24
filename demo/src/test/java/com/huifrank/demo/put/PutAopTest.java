@@ -26,8 +26,8 @@ public class PutAopTest {
         bankCardDal.put(bankCard);
 
 
-        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->[0]).id # [0].id")),
-                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->[0]).indexCardId # [0].indexCardId")),
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->[0]).id # [0]")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->[0]).indexCardId # [0]")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:cardNo:(->[0]).cardNo # [0].cardNo")),
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:mobile:(->[0]).mobile # [0].mobile"))
         );

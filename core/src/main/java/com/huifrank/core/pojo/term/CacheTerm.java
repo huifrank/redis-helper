@@ -1,5 +1,6 @@
-package com.huifrank.core.pojo.expression;
+package com.huifrank.core.pojo.term;
 
+import com.huifrank.core.pojo.expression.SoloExpression;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Term {
+public class CacheTerm {
 
     private String indexName;
 
@@ -20,7 +21,7 @@ public class Term {
     private SoloExpression before;
 
 
-    public Term(String indexName){
+    public CacheTerm(String indexName){
         this.indexName = indexName;
     }
 

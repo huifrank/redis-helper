@@ -1,5 +1,6 @@
 package com.huifrank.core.pojo.expression;
 
+import com.huifrank.core.pojo.term.CacheTerm;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,20 +13,20 @@ import lombok.experimental.Accessors;
 public abstract class BinaryExpression implements Expression{
 
 
-    private Term keyTerm;
+    private CacheTerm keyCacheTerm;
 
     private String name;
 
     @Override
     public String toString() {
 
-        if (getKeyTerm().getBefore() != null) {
-            if (getKeyTerm().getRefBeforeName() != null) {
-                return "->" + getKeyTerm() + "(" + getKeyTerm().getBefore() + ")." + getKeyTerm().getRefBeforeName();
+        if (getKeyCacheTerm().getBefore() != null) {
+            if (getKeyCacheTerm().getRefBeforeName() != null) {
+                return "->" + getKeyCacheTerm() + "(" + getKeyCacheTerm().getBefore() + ")." + getKeyCacheTerm().getRefBeforeName();
             }
-            return "->" + getKeyTerm() + "(" + getKeyTerm().getBefore() + ")";
+            return "->" + getKeyCacheTerm() + "(" + getKeyCacheTerm().getBefore() + ")";
         } else {
-            return "->" + getKeyTerm();
+            return "->" + getKeyCacheTerm();
         }
     }
 

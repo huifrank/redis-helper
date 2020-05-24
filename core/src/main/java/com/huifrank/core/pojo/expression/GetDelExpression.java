@@ -11,22 +11,14 @@ public class GetDelExpression extends SoloExpression{
         return Type.GET_DEL;
     }
 
-    public static GetDelExpression of(GetExpression exp){
 
-        GetDelExpression getDelExpression = new GetDelExpression();
-        getDelExpression.setCacheIndexType(exp.getCacheIndexType());
-        getDelExpression.setName(exp.getName());
-        getDelExpression.setTerm(exp.getTerm());
 
-        return getDelExpression;
-
-    }
     public static GetDelExpression of(SoloExpression exp){
 
         GetDelExpression getDelExpression = new GetDelExpression();
         getDelExpression.setCacheIndexType(exp.getCacheIndexType());
         getDelExpression.setName(exp.getName());
-        getDelExpression.setTerm(exp.getTerm());
+        getDelExpression.setCacheTerm(exp.getCacheTerm());
 
         return getDelExpression;
 
