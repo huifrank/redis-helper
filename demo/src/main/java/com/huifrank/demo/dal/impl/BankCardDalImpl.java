@@ -4,6 +4,7 @@ import com.huifrank.annotation.CacheFor;
 import com.huifrank.annotation.Field;
 import com.huifrank.annotation.action.Evict;
 import com.huifrank.annotation.action.Put;
+import com.huifrank.annotation.action.Query;
 import com.huifrank.annotation.action.Update;
 import com.huifrank.demo.dal.BankCardDal;
 import com.huifrank.demo.entity.BankCard;
@@ -99,6 +100,27 @@ public class BankCardDalImpl implements BankCardDal {
     @Put
     public int put(BankCard card) {
         return 0;
+    }
+
+    @Override
+    @CacheFor(bufferEntity = BankCard.class)
+    @Query(where = {"id"},result = "BankCard")
+    public BankCard queryById(String id) {
+        return null;
+    }
+
+    @Override
+    @CacheFor(bufferEntity = BankCard.class)
+    @Query(where = {"id"},result = "BankCard.mobile")
+    public String queryMobileById(String id) {
+        return "";
+    }
+
+    @Override
+    @CacheFor(bufferEntity = BankCard.class)
+    @Query(where = {"cardNo"},result = "BankCard.id")
+    public String queryIdByCardNo(String cardNo) {
+        return "";
     }
 
     @Override

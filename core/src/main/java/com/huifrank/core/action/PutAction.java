@@ -35,7 +35,6 @@ public class PutAction {
 
 
 
-    IndexResolver indexResolver = new IndexResolver();
 
     PutOpsExe  putOpsExe = PutExe4Test.getInstance();
 

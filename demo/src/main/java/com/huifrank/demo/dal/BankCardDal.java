@@ -3,6 +3,7 @@ package com.huifrank.demo.dal;
 import com.huifrank.annotation.CacheFor;
 import com.huifrank.annotation.Field;
 import com.huifrank.annotation.action.Evict;
+import com.huifrank.annotation.action.Query;
 import com.huifrank.annotation.action.Update;
 import com.huifrank.demo.entity.BankCard;
 
@@ -31,6 +32,13 @@ public interface BankCardDal {
     int update(BankCard card);
 
     int put(BankCard card);
+
+    BankCard queryById(String id);
+
+
+    String queryMobileById(String id);
+
+    String queryIdByCardNo(String cardNo);
 
     int updateNameById(BankCard card, String id);
 

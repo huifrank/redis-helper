@@ -94,12 +94,12 @@ public class IndexResolver {
 
         String normal = prefix+ CacheContext.CACHE_SPLIT+refName+CacheContext.CACHE_SPLIT;
 
-        DelExpression getExpression = new DelExpression();
-        getExpression.setCacheTerm(new CacheTerm(normal).setBefore(before).setRefBeforeName(refName))
+        DelExpression delExpression = new DelExpression();
+        delExpression.setCacheTerm(new CacheTerm(normal).setBefore(before).setRefBeforeName(refName))
                 .setCacheIndexType(CacheIndexType.NormalIndex)
                 .setName(refName);
 
-        return getExpression;
+        return delExpression;
     }
 
     /**
