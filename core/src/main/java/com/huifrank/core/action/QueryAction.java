@@ -6,9 +6,9 @@ import com.huifrank.annotation.action.Put;
 import com.huifrank.annotation.action.Query;
 import com.huifrank.core.CacheIndexType;
 import com.huifrank.core.context.CacheContext;
-import com.huifrank.core.executor.PutExe4Test;
-import com.huifrank.core.executor.PutOpsExe;
+import com.huifrank.core.executor.*;
 import com.huifrank.core.executor.ops.PutOps;
+import com.huifrank.core.executor.ops.QueryOps;
 import com.huifrank.core.pojo.CacheIndex;
 import com.huifrank.core.pojo.ParamMap;
 import com.huifrank.core.pojo.Result;
@@ -24,6 +24,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -44,7 +45,8 @@ public class QueryAction {
 
 
 
-    PutOpsExe  putOpsExe = PutExe4Test.getInstance();
+    QueryOpsExe queryOpsExe = QueryExe4Test.getInstance();
+
 
     CacheContext cacheContext = new CacheContext();
 
@@ -69,10 +71,19 @@ public class QueryAction {
         List<ParamMap> paramMaps = cacheContext.getParamMaps(method,methodCode,query.where());
 
 
-        GetExpression expression = decideCachePlan(cacheIndices, paramMaps, result, entity,prefix);
+        GetExpression expression = decideCachePlan(cacheIndices, paramMaps, result,prefix);
 
 
-        return proceedAndExecute(Collections.singletonList(expression),joinPoint);
+        Object execute = execute(expression);
+
+        if(needProceed(execute)){
+
+            return joinPoint.proceed();
+        }
+
+
+        return execute;
+
     }
 
     /**
@@ -85,7 +96,7 @@ public class QueryAction {
      *                  --> 入参为聚集索引
      *                  \_---> 聚集索引取结果
      */
-    private GetExpression decideCachePlan(List<CacheIndex> cacheIndices,List<ParamMap> params,Result result,Class entity,String prefix){
+    private GetExpression decideCachePlan(List<CacheIndex> cacheIndices,List<ParamMap> params,Result result,String prefix){
 
         //查询类型
 
@@ -149,12 +160,17 @@ public class QueryAction {
     }
 
 
+    private boolean needProceed(Object cacheResult){
+        //todo impl
+        return true;
+    }
 
 
-    private Object proceedAndExecute(List<GetExpression> getExpressions, ProceedingJoinPoint joinPoint) throws Throwable {
-        //执行原方法
-        Object proceed = joinPoint.proceed();
+    private Object execute(GetExpression getExpressions) {
 
-        return proceed;
+        List<Object> execute = queryOpsExe.execute(Collections.singletonList(new QueryOps(getExpressions)));
+
+        return execute;
+
     }
 }
