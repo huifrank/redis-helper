@@ -11,12 +11,14 @@ import com.huifrank.core.executor.PutOpsExe;
 import com.huifrank.core.executor.ops.PutOps;
 import com.huifrank.core.pojo.CacheIndex;
 import com.huifrank.core.pojo.ParamMap;
+import com.huifrank.core.pojo.Result;
 import com.huifrank.core.pojo.expression.GetDelExpression;
 import com.huifrank.core.pojo.expression.GetExpression;
 import com.huifrank.core.pojo.expression.PutExpression;
 import com.huifrank.core.pojo.term.CacheTerm;
 import com.huifrank.core.pojo.term.ReflectTerm;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -48,7 +50,7 @@ public class QueryAction {
 
 
     @Around(value = "@annotation(com.huifrank.annotation.action.Query)")
-    public Object doPutAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object doQueryAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         String methodCode = "query@" + cacheContext.getMethodSignature(method);
@@ -60,12 +62,12 @@ public class QueryAction {
         BufferEntity bufferEntity = (BufferEntity) entity.getAnnotation(BufferEntity.class);
         //索引前缀
         String prefix = bufferEntity.keyPrefix();
-        String result = query.result();
+
+        Result result = new Result(entity,query.result());
 
         List<CacheIndex> cacheIndices = cacheContext.getCacheIndex(entity);
         List<ParamMap> paramMaps = cacheContext.getParamMaps(method,methodCode,query.where());
 
-        ParamMap paramMap = paramMaps.get(0);
 
         GetExpression expression = decideCachePlan(cacheIndices, paramMaps, result, entity,prefix);
 
@@ -83,22 +85,21 @@ public class QueryAction {
      *                  --> 入参为聚集索引
      *                  \_---> 聚集索引取结果
      */
-    private GetExpression decideCachePlan(List<CacheIndex> cacheIndices,List<ParamMap> params,String result,Class entity,String prefix){
+    private GetExpression decideCachePlan(List<CacheIndex> cacheIndices,List<ParamMap> params,Result result,Class entity,String prefix){
 
         //查询类型
-        boolean queryEntire = entity.getSimpleName().equals(result);
 
         ParamMap param = params.get(0);
         Optional<CacheIndex> relateIndex = cacheIndices.stream().filter(index -> index.getName().equals(param.getName())).findFirst();
 
-        CacheIndex cacheIndex = relateIndex.orElse(null);
+        CacheIndex cacheIndex = relateIndex.orElseThrow(()->new RuntimeException("入参未关联索引"));
         GetExpression getExpression;
         switch (cacheIndex.getIndexType()){
             case ClusterIndex:
-                    getExpression = (clusterIndex(cacheIndex,param,prefix));
+                    getExpression = clusterIndex(cacheIndex,param,prefix);
                     break;
                 case NormalIndex:
-                    getExpression =  normalIndex(cacheIndices,cacheIndex,param,prefix);
+                    getExpression = normalIndex(cacheIndices,cacheIndex,param,prefix,result);
                     break;
             default: throw new RuntimeException("不支持的索引类型");
 
@@ -120,23 +121,31 @@ public class QueryAction {
         return before;
 
     }
-    public GetExpression normalIndex(List<CacheIndex>  cacheIndices,CacheIndex cacheIndex , ParamMap param,String prefix){
+    public GetExpression normalIndex(List<CacheIndex>  cacheIndices,CacheIndex cacheIndex,ParamMap param,String prefix,Result result){
         String normal = prefix+ CacheContext.CACHE_SPLIT+cacheIndex.getName()+CacheContext.CACHE_SPLIT;
 
         CacheIndex cluster = cacheIndices.stream().filter(c -> c.getName().equals(cacheIndex.getRefIndex())).findFirst().orElseThrow(()->new RuntimeException("普通索引必须关联有聚簇索引"));
         String clusterName = prefix+ CacheContext. CACHE_SPLIT+cluster.getName() + CacheContext.CACHE_SPLIT;
         GetExpression after = new GetExpression();
-        GetExpression before = new GetExpression();
 
-        before.setCacheTerm(new CacheTerm(normal).setValueIndex(param.getIndex()))
-                .setCacheIndexType(CacheIndexType.NormalIndex)
-                .setName(param.getName());
-        after.setCacheTerm(new CacheTerm(clusterName).setValueIndex(param.getIndex()).setBefore(before))
+        CacheTerm cacheTerm = new CacheTerm(clusterName);
+        after.setCacheTerm(cacheTerm)
                 .setCacheIndexType(CacheIndexType.ClusterIndex)
                 .setName(cluster.getName());
 
+        GetExpression before = new GetExpression();
+        before.setCacheTerm(new CacheTerm(normal).setValueIndex(param.getIndex()))
+                .setCacheIndexType(CacheIndexType.NormalIndex)
+                .setName(param.getName());
 
-        return after;
+        //属性为空  或  索引关联的属性不是要取的值时，需要关联到聚集索引
+        if(StringUtils.isBlank(result.getProperty()) || !StringUtils.equals(cacheIndex.getRefIndex(),result.getPropertyName())){
+
+            cacheTerm.setBefore(before);
+            return after;
+        }
+
+        return before;
     }
 
 

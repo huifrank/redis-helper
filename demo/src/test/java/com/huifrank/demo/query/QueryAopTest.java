@@ -31,4 +31,10 @@ public class QueryAopTest {
         String id = bankCardDal.queryIdByCardNo("cardNo_123123");
 
     }
+    @Test
+    public void testSimpleQueryAll(){
+
+        bankCardDal.queryByCardNo("cardNo_123123");
+
+    }
 }
