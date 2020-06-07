@@ -4,7 +4,7 @@ import com.huifrank.annotation.BufferEntity;
 import com.huifrank.annotation.CacheFor;
 import com.huifrank.annotation.action.Put;
 import com.huifrank.core.context.CacheContext;
-import com.huifrank.core.executor.PutExe4Test;
+import com.huifrank.core.executor.impl.PutExe4Test;
 import com.huifrank.core.executor.PutOpsExe;
 import com.huifrank.core.executor.ops.PutOps;
 import com.huifrank.core.executor.ops.Values;
@@ -13,7 +13,6 @@ import com.huifrank.core.pojo.ParamMap;
 import com.huifrank.core.pojo.expression.*;
 import com.huifrank.core.pojo.term.CacheTerm;
 import com.huifrank.core.pojo.term.ReflectTerm;
-import com.huifrank.core.resolver.IndexResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

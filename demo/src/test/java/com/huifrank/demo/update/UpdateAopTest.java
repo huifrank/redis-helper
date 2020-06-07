@@ -1,6 +1,6 @@
 package com.huifrank.demo.update;
 
-import com.huifrank.core.executor.DeleteExe4Test;
+import com.huifrank.core.executor.impl.DeleteExe4Test;
 import com.huifrank.demo.RedisHelperDemoRunner;
 import com.huifrank.demo.dal.BankCardDal;
 import com.huifrank.demo.entity.BankCard;

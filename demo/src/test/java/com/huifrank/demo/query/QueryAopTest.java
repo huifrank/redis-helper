@@ -1,9 +1,6 @@
 package com.huifrank.demo.query;
 
-import com.huifrank.core.executor.PutExe4Test;
-import com.huifrank.core.executor.QueryExe4Test;
-import com.huifrank.core.executor.QueryOpsExe;
-import com.huifrank.core.executor.ops.QueryOps;
+import com.huifrank.core.executor.impl.QueryExe4Test;
 import com.huifrank.demo.RedisHelperDemoRunner;
 import com.huifrank.demo.dal.BankCardDal;
 import com.huifrank.demo.entity.BankCard;

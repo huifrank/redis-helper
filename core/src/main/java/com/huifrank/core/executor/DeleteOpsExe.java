@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface DeleteOpsExe {
 
-  void execute(List<DelOps> opsList);
   void execute(List<DelOps> opsList, Values values);
 
 

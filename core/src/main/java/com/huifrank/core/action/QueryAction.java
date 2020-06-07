@@ -2,18 +2,18 @@ package com.huifrank.core.action;
 
 import com.huifrank.annotation.BufferEntity;
 import com.huifrank.annotation.CacheFor;
-import com.huifrank.annotation.action.Put;
 import com.huifrank.annotation.action.Query;
 import com.huifrank.core.CacheIndexType;
 import com.huifrank.core.context.CacheContext;
 import com.huifrank.core.executor.*;
+import com.huifrank.core.executor.impl.PutExe4Test;
+import com.huifrank.core.executor.impl.QueryExe4Test;
 import com.huifrank.core.executor.ops.PutOps;
 import com.huifrank.core.executor.ops.QueryOps;
 import com.huifrank.core.executor.ops.Values;
 import com.huifrank.core.pojo.CacheIndex;
 import com.huifrank.core.pojo.ParamMap;
 import com.huifrank.core.pojo.Result;
-import com.huifrank.core.pojo.expression.GetDelExpression;
 import com.huifrank.core.pojo.expression.GetExpression;
 import com.huifrank.core.pojo.expression.PutExpression;
 import com.huifrank.core.pojo.term.CacheTerm;
@@ -25,7 +25,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -73,7 +72,7 @@ public class QueryAction {
         GetExpression expression = decideQueryCachePlan(cacheIndices, paramMaps, result,prefix);
 
 
-        Object execute = execute(expression,joinPoint.getArgs());
+        Object execute = executeGet(expression,joinPoint.getArgs());
 
         //是否需要执行原方法
         if(needProceed(execute)){
@@ -228,7 +227,7 @@ public class QueryAction {
     }
 
 
-    private Object execute(GetExpression getExpressions,Object [] args) {
+    private Object executeGet(GetExpression getExpressions,Object [] args) {
 
         List<Object> execute = queryOpsExe.execute(Collections.singletonList(new QueryOps(getExpressions)),new Values().setArgsList(Arrays.asList(args)));
 

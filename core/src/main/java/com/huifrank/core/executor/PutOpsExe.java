@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface PutOpsExe {
 
-  void execute(List<PutOps> opsList);
 
   void execute(List<PutOps> opsList, Values values);
 

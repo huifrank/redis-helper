@@ -1,5 +1,6 @@
-package com.huifrank.core.executor;
+package com.huifrank.core.executor.impl;
 
+import com.huifrank.core.executor.QueryOpsExe;
 import com.huifrank.core.executor.ops.QueryOps;
 import com.huifrank.core.executor.ops.Values;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
  * 供单元测试用的实现
  */
 @Slf4j
-public class QueryExe4Test implements QueryOpsExe{
+public class QueryExe4Test implements QueryOpsExe {
 
     List<String> exp = Collections.emptyList();
 
@@ -24,15 +25,7 @@ public class QueryExe4Test implements QueryOpsExe{
 
     private QueryExe4Test(){}
 
-    @Override
-    @Deprecated
-    public List<Object> execute(List<QueryOps> opsList) {
-        exp = opsList.stream().map(f-> f.getGetExpression().toString()).collect(Collectors.toList());
 
-        exp.forEach(log::info);
-
-        return Collections.EMPTY_LIST;
-    }
 
     @Override
     public List<Object> execute(List<QueryOps> opsList, Values values) {

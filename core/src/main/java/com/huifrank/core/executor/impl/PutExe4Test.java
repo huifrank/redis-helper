@@ -1,5 +1,6 @@
-package com.huifrank.core.executor;
+package com.huifrank.core.executor.impl;
 
+import com.huifrank.core.executor.PutOpsExe;
 import com.huifrank.core.executor.ops.PutOps;
 import com.huifrank.core.executor.ops.Values;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
  * 供单元测试用的实现
  */
 @Slf4j
-public class PutExe4Test implements PutOpsExe{
+public class PutExe4Test implements PutOpsExe {
 
     List<String> exp = Collections.emptyList();
 
@@ -24,12 +25,7 @@ public class PutExe4Test implements PutOpsExe{
 
     private PutExe4Test(){}
 
-    @Override
-    public void execute(List<PutOps> opsList) {
-        exp = opsList.stream().map(f-> f.getGetExpression().toString()).collect(Collectors.toList());
 
-        exp.forEach(log::info);
-    }
 
     @Override
     public void execute(List<PutOps> opsList, Values values) {

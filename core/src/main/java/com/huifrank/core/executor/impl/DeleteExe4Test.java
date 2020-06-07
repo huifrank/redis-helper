@@ -1,5 +1,6 @@
-package com.huifrank.core.executor;
+package com.huifrank.core.executor.impl;
 
+import com.huifrank.core.executor.DeleteOpsExe;
 import com.huifrank.core.executor.ops.DelOps;
 import com.huifrank.core.executor.ops.Values;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
  * 供单元测试用的实现
  */
 @Slf4j
-public class DeleteExe4Test implements DeleteOpsExe{
+public class DeleteExe4Test implements DeleteOpsExe {
 
     List<String> exp = Collections.emptyList();
 
@@ -24,12 +25,6 @@ public class DeleteExe4Test implements DeleteOpsExe{
 
     private DeleteExe4Test(){}
 
-    @Override
-    public void execute(List<DelOps> opsList) {
-        exp = opsList.stream().map(f-> f.getGetExpression().toString()).collect(Collectors.toList());
-
-        exp.forEach(log::info);
-    }
 
     @Override
     public void execute(List<DelOps> opsList, Values values) {
