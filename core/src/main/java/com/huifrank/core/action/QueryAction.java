@@ -47,6 +47,7 @@ public class QueryAction {
 
     QueryOpsExe queryOpsExe = QueryExe4Test.getInstance();
 
+    PutOpsExe  putOpsExe = PutExe4Test.getInstance();
 
     CacheContext cacheContext = new CacheContext();
 
@@ -79,17 +80,21 @@ public class QueryAction {
         //是否需要执行原方法
         if(needProceed(execute)){
             Object proceed = joinPoint.proceed();
-            List<PutExpression> expressions = decidePutCachePlan(prefix, result, proceed, cacheIndices);
+            if(proceed != null) {
+                //加缓存
+                List<PutExpression> putExpressions = decidePutCachePlan(prefix, result, proceed, cacheIndices);
+                executePut(putExpressions,proceed);
+            }
+
+            return proceed;
 
         }
-        // todo 加入缓存
 
         return execute;
 
     }
 
     /**
-     * todo set value
      * 只有返回完整对象的情况下才加缓存
      * @param result
      * @param execute
@@ -107,12 +112,14 @@ public class QueryAction {
                         nBefore.setCacheTerm(new CacheTerm().setValueIndex("0"));
                         putExpression.setKeyCacheTerm(new CacheTerm(prefix+ CacheContext.CACHE_SPLIT+index.getName()+CacheContext.CACHE_SPLIT).setBefore(nBefore).setRefBeforeName(index.getName()));
                         putExpression.setName(index.getName());
+                        putExpression.setValueTerm(new ReflectTerm().setFieldName(index.getName()).setValueIndex("0"));
                         return putExpression;
                     case ClusterIndex:
                         GetExpression cBefore = new GetExpression();
                         cBefore.setCacheTerm(new CacheTerm().setValueIndex("0"));
                         putExpression.setKeyCacheTerm(new CacheTerm(prefix+ CacheContext.CACHE_SPLIT+index.getName()+CacheContext.CACHE_SPLIT).setBefore(cBefore).setRefBeforeName(index.getName()));
                         putExpression.setName(index.getName());
+                        putExpression.setValueTerm(new ReflectTerm().setValueIndex("0"));
                         return putExpression;
 
                     default: throw new RuntimeException("不支持的索引类型");
@@ -215,6 +222,11 @@ public class QueryAction {
     private boolean needProceed(Object cacheResult){
         //todo impl
         return true;
+    }
+
+    private void executePut(List<PutExpression> putExpression,Object args) {
+        List<PutOps> opsList = putExpression.stream().map(o-> new PutOps(o)).collect(Collectors.toList());
+        putOpsExe.execute(opsList);
     }
 
 

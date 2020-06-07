@@ -106,7 +106,7 @@ public class BankCardDalImpl implements BankCardDal {
     @CacheFor(bufferEntity = BankCard.class)
     @Query(where = {"id"},result = "BankCard")
     public BankCard queryById(String id) {
-        return null;
+        return new BankCard();
     }
 
     @Override
