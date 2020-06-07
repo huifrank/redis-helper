@@ -1,6 +1,7 @@
 package com.huifrank.core.executor;
 
 import com.huifrank.core.executor.ops.DelOps;
+import com.huifrank.core.executor.ops.Values;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
@@ -25,6 +26,13 @@ public class DeleteExe4Test implements DeleteOpsExe{
 
     @Override
     public void execute(List<DelOps> opsList) {
+        exp = opsList.stream().map(f-> f.getGetExpression().toString()).collect(Collectors.toList());
+
+        exp.forEach(log::info);
+    }
+
+    @Override
+    public void execute(List<DelOps> opsList, Values values) {
         exp = opsList.stream().map(f-> f.getGetExpression().toString()).collect(Collectors.toList());
 
         exp.forEach(log::info);

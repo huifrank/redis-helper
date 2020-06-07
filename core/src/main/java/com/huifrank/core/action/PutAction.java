@@ -7,6 +7,7 @@ import com.huifrank.core.context.CacheContext;
 import com.huifrank.core.executor.PutExe4Test;
 import com.huifrank.core.executor.PutOpsExe;
 import com.huifrank.core.executor.ops.PutOps;
+import com.huifrank.core.executor.ops.Values;
 import com.huifrank.core.pojo.CacheIndex;
 import com.huifrank.core.pojo.ParamMap;
 import com.huifrank.core.pojo.expression.*;
@@ -21,6 +22,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,7 +78,7 @@ public class PutAction {
         }).collect(Collectors.toList());
 
 
-        return proceedAndExecute(expressions,joinPoint);
+        return proceedAndExecute(expressions,joinPoint.getArgs(),joinPoint);
     }
 
     private PutExpression clusterIndex(final String prefix, CacheIndex clusterIndex, ParamMap curParam){
@@ -107,11 +109,11 @@ public class PutAction {
     }
 
 
-    private Object proceedAndExecute(List<PutExpression> getExpressions, ProceedingJoinPoint joinPoint) throws Throwable {
+    private Object proceedAndExecute(List<PutExpression> getExpressions,Object [] args, ProceedingJoinPoint joinPoint) throws Throwable {
         //执行原方法
         Object proceed = joinPoint.proceed();
         List<PutOps> opsList = getExpressions.stream().map(o-> new PutOps(o)).collect(Collectors.toList());
-        putOpsExe.execute(opsList);
+        putOpsExe.execute(opsList,new Values().setArgsList(Arrays.asList(args)));
 
         return proceed;
     }

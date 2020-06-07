@@ -1,6 +1,7 @@
 package com.huifrank.core.executor;
 
 import com.huifrank.core.executor.ops.QueryOps;
+import com.huifrank.core.executor.ops.Values;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
@@ -24,6 +25,7 @@ public class QueryExe4Test implements QueryOpsExe{
     private QueryExe4Test(){}
 
     @Override
+    @Deprecated
     public List<Object> execute(List<QueryOps> opsList) {
         exp = opsList.stream().map(f-> f.getGetExpression().toString()).collect(Collectors.toList());
 
@@ -31,6 +33,14 @@ public class QueryExe4Test implements QueryOpsExe{
 
         return Collections.EMPTY_LIST;
     }
+
+    @Override
+    public List<Object> execute(List<QueryOps> opsList, Values values) {
+        exp = opsList.stream().map(f-> f.getGetExpression().toString()).collect(Collectors.toList());
+
+        exp.forEach(log::info);
+
+        return Collections.EMPTY_LIST;    }
 
 
     public boolean containsExp(String exp){

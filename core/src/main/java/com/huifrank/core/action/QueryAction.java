@@ -9,6 +9,7 @@ import com.huifrank.core.context.CacheContext;
 import com.huifrank.core.executor.*;
 import com.huifrank.core.executor.ops.PutOps;
 import com.huifrank.core.executor.ops.QueryOps;
+import com.huifrank.core.executor.ops.Values;
 import com.huifrank.core.pojo.CacheIndex;
 import com.huifrank.core.pojo.ParamMap;
 import com.huifrank.core.pojo.Result;
@@ -27,10 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -75,7 +73,7 @@ public class QueryAction {
         GetExpression expression = decideQueryCachePlan(cacheIndices, paramMaps, result,prefix);
 
 
-        Object execute = execute(expression);
+        Object execute = execute(expression,joinPoint.getArgs());
 
         //是否需要执行原方法
         if(needProceed(execute)){
@@ -226,13 +224,13 @@ public class QueryAction {
 
     private void executePut(List<PutExpression> putExpression,Object args) {
         List<PutOps> opsList = putExpression.stream().map(o-> new PutOps(o)).collect(Collectors.toList());
-        putOpsExe.execute(opsList);
+        putOpsExe.execute(opsList,new Values().setArgsList(Collections.singletonList(args)));
     }
 
 
-    private Object execute(GetExpression getExpressions) {
+    private Object execute(GetExpression getExpressions,Object [] args) {
 
-        List<Object> execute = queryOpsExe.execute(Collections.singletonList(new QueryOps(getExpressions)));
+        List<Object> execute = queryOpsExe.execute(Collections.singletonList(new QueryOps(getExpressions)),new Values().setArgsList(Arrays.asList(args)));
 
         return execute;
 

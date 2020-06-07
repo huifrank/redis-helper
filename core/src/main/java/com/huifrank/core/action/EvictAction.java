@@ -8,6 +8,7 @@ import com.huifrank.core.context.CacheContext;
 import com.huifrank.core.executor.DeleteExe4Test;
 import com.huifrank.core.executor.DeleteOpsExe;
 import com.huifrank.core.executor.ops.DelOps;
+import com.huifrank.core.executor.ops.Values;
 import com.huifrank.core.pojo.expression.GetExpression;
 import com.huifrank.core.pojo.expression.SoloExpression;
 import com.huifrank.core.resolver.IndexResolver;
@@ -21,6 +22,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -49,7 +51,7 @@ public class EvictAction {
 
         List<SoloExpression> getExpressions = cacheContext.getExpressionsCacheOnly(methodCode);
         if(getExpressions != null){
-            return proceedAndExecute(getExpressions,joinPoint);
+            return proceedAndExecute(getExpressions,joinPoint.getArgs(),joinPoint);
         }
 
         //未命中缓存，重新解析
@@ -73,15 +75,15 @@ public class EvictAction {
 
         cacheContext.addExpressionsCache(methodCode, getExpressions);
 
-        return proceedAndExecute(getExpressions,joinPoint);
+        return proceedAndExecute(getExpressions,joinPoint.getArgs(),joinPoint);
 
     }
 
-    private Object proceedAndExecute(List<SoloExpression> getExpressions, ProceedingJoinPoint joinPoint) throws Throwable {
+    private Object proceedAndExecute(List<SoloExpression> getExpressions,Object [] args, ProceedingJoinPoint joinPoint) throws Throwable {
         //执行原方法
         Object proceed = joinPoint.proceed();
         List<DelOps> opsList = getExpressions.stream().map(o-> new DelOps(o)).collect(Collectors.toList());
-        deleteOpsExe.execute(opsList);
+        deleteOpsExe.execute(opsList,new Values().setArgsList(Arrays.asList(args)));
 
         return proceed;
     }
