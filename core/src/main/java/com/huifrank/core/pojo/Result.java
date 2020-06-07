@@ -1,7 +1,6 @@
 package com.huifrank.core.pojo;
 
 import lombok.Data;
-import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 @Data

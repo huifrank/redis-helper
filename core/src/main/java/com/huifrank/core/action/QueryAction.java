@@ -71,20 +71,62 @@ public class QueryAction {
         List<ParamMap> paramMaps = cacheContext.getParamMaps(method,methodCode,query.where());
 
 
-        GetExpression expression = decideCachePlan(cacheIndices, paramMaps, result,prefix);
+        GetExpression expression = decideQueryCachePlan(cacheIndices, paramMaps, result,prefix);
 
 
         Object execute = execute(expression);
 
+        //是否需要执行原方法
         if(needProceed(execute)){
+            Object proceed = joinPoint.proceed();
+            List<PutExpression> expressions = decidePutCachePlan(prefix, result, proceed, cacheIndices);
 
-            return joinPoint.proceed();
         }
-
+        // todo 加入缓存
 
         return execute;
 
     }
+
+    /**
+     * todo set value
+     * 只有返回完整对象的情况下才加缓存
+     * @param result
+     * @param execute
+     * @return
+     */
+    private List<PutExpression> decidePutCachePlan(String prefix,Result result,Object execute,List<CacheIndex> cacheIndices){
+
+        if(StringUtils.isBlank(result.getProperty())){
+
+            return cacheIndices.stream().map(index -> {
+                PutExpression putExpression = new PutExpression();
+                switch (index.getIndexType()){
+                    case NormalIndex:
+                        GetExpression nBefore = new GetExpression();
+                        nBefore.setCacheTerm(new CacheTerm().setValueIndex("0"));
+                        putExpression.setKeyCacheTerm(new CacheTerm(prefix+ CacheContext.CACHE_SPLIT+index.getName()+CacheContext.CACHE_SPLIT).setBefore(nBefore).setRefBeforeName(index.getName()));
+                        putExpression.setName(index.getName());
+                        return putExpression;
+                    case ClusterIndex:
+                        GetExpression cBefore = new GetExpression();
+                        cBefore.setCacheTerm(new CacheTerm().setValueIndex("0"));
+                        putExpression.setKeyCacheTerm(new CacheTerm(prefix+ CacheContext.CACHE_SPLIT+index.getName()+CacheContext.CACHE_SPLIT).setBefore(cBefore).setRefBeforeName(index.getName()));
+                        putExpression.setName(index.getName());
+                        return putExpression;
+
+                    default: throw new RuntimeException("不支持的索引类型");
+                }
+
+            }).collect(Collectors.toList());
+
+        }
+
+        return Collections.EMPTY_LIST;
+
+    }
+
+
 
     /**
      * 1 查询整个缓存对象  --> 入参关联聚集索引
@@ -96,7 +138,7 @@ public class QueryAction {
      *                  --> 入参为聚集索引
      *                  \_---> 聚集索引取结果
      */
-    private GetExpression decideCachePlan(List<CacheIndex> cacheIndices,List<ParamMap> params,Result result,String prefix){
+    private GetExpression decideQueryCachePlan(List<CacheIndex> cacheIndices,List<ParamMap> params,Result result,String prefix){
 
         //查询类型
 
@@ -132,6 +174,16 @@ public class QueryAction {
         return before;
 
     }
+
+    /**
+     *
+     * @param cacheIndices
+     * @param cacheIndex
+     * @param param
+     * @param prefix 索引前缀
+     * @param result 用来判断方法返回值是整个对象，还是部分属性
+     * @return
+     */
     public GetExpression normalIndex(List<CacheIndex>  cacheIndices,CacheIndex cacheIndex,ParamMap param,String prefix,Result result){
         String normal = prefix+ CacheContext.CACHE_SPLIT+cacheIndex.getName()+CacheContext.CACHE_SPLIT;
 
