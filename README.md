@@ -55,9 +55,10 @@ bankCard:mobile:{mobile}              ->  {bankCard.indexCardId}
 
 ### 使用
 
+## del
 <b>入参仅聚簇索引</b>
 
-如果参数值和`bufferEntity`中的缓存key名字一样的话可以省略`@Filed`注解
+ *如果参数值和`bufferEntity`中的缓存key名字一样的话可以省略`@Filed`注解*
 ```java
     @Evict
     @CacheFor(bufferEntity = BankCard.class)
@@ -99,21 +100,30 @@ bankCard:mobile:{mobile}              ->  {bankCard.indexCardId}
 ```
 
 对应的缓存key为：
-```
+```java
 ->bankCard:id:(bankCard:cardNo:{cardNo})
 ->bankCard:indexCardId:(bankCard:id:(bankCard:cardNo:{cardNo})).indexCardId
 ->bankCard:mobile:(bankCard:id:(bankCard:cardNo:{cardNo})).mobile
 ```
 
-关于update 和 put 操作还没想好怎么实现。
+## put
+ put只能传入完整的DO对象。    
+```java
+ ->bankCard:id:(->[0]).id # [0]
+ ->bankCard:indexCardId:(->[0]).indexCardId # [0]
+ ->bankCard:cardNo:(->[0]).cardNo # [0].cardNo
+ ->bankCard:mobile:(->[0]).mobile # [0].mobile
+```
+## query
+查询暂时仅支持一个入参(多个入参，或DO对象型的入参开发中)
 
-大概分几种情况吧：
-### update
-1 更新的时候dal层传入整个DO对象，对象里面所有值都有值，用where指定更新范围。
-    
-    *这种方式应该是用起来最难受的，但是切面实现起来简单*
-2 只传要更新的值，用where指定更新范围。
-    
-    *这样怎么去更新缓存是个问题，不能保证where中关联的key在缓存中一定有值，可以没值的话直接降级为删除缓存？*
-### put
-1 put只能传入完整的DO对象。    
+如果查询缓存返回会空，则执行原方法。并加入缓存(只有result为整个DO对象时)
+```java
+//QUERY:
+->bankCard:id:[0]
+//PUT:
+->bankCard:id:(->[0]).id # [0]
+->bankCard:indexCardId:(->[0]).indexCardId # [0]
+->bankCard:cardNo:(->[0]).cardNo # [0].cardNo
+->bankCard:mobile:(->[0]).mobile # [0].mobile
+```
