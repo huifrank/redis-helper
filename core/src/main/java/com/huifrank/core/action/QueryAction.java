@@ -55,6 +55,8 @@ public class QueryAction {
         Method method = signature.getMethod();
         String methodCode = "query@" + cacheContext.getMethodSignature(method);
 
+        Class returnType = signature.getReturnType();
+
         CacheFor cacheFor = method.getAnnotation(CacheFor.class);
         Query query = method.getAnnotation(Query.class);
         //缓存实体

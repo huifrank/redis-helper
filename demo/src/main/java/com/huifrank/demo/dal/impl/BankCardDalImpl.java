@@ -137,6 +137,14 @@ public class BankCardDalImpl implements BankCardDal {
 
         return 0;
     }
+    @Override
+    @CacheFor(bufferEntity = BankCard.class)
+    @Query(where = {"cardNo","cardType"},result = "BankCard")
+    public BankCard queryByCardNoAndType(String cardNo,String cardType){
+        return new BankCard();
+
+    }
+
 
     @Override
     @CacheFor(bufferEntity = BankCard.class)

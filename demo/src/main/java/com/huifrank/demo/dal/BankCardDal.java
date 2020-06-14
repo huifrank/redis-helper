@@ -44,5 +44,7 @@ public interface BankCardDal {
 
     int updateNameById(BankCard card, String id);
 
+    BankCard queryByCardNoAndType(String cardNo, String cardType);
+
     int updateNameById(String name, String id);
 }

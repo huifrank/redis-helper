@@ -3,6 +3,7 @@ package com.huifrank.demo.query;
 import com.huifrank.core.executor.impl.QueryExe4Test;
 import com.huifrank.demo.RedisHelperDemoRunner;
 import com.huifrank.demo.dal.BankCardDal;
+import com.huifrank.demo.dal.StudentDal;
 import com.huifrank.demo.entity.BankCard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,8 @@ public class QueryAopTest {
     @Autowired
     BankCardDal bankCardDal;
 
+    @Autowired
+    StudentDal studentDal;
 
     QueryExe4Test exe4Test = QueryExe4Test.getInstance();
 
@@ -43,6 +46,16 @@ public class QueryAopTest {
         Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->bankCard:cardNo:[0])")));
         Assertions.assertEquals(1,exe4Test.expSize());
 
+    }
 
+    @Test
+    public void testQueryMulParam(){
+
+        bankCardDal.queryByCardNoAndType("cardNo_123123","D");
+    }
+    @Test
+    public void testQueryMulGet(){
+
+        studentDal.queryByTeacherId(123123);
     }
 }
