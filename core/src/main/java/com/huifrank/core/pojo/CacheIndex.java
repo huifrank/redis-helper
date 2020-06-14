@@ -1,5 +1,7 @@
 package com.huifrank.core.pojo;
 
+import com.huifrank.annotation.CacheStructure;
+import com.huifrank.annotation.Mapping;
 import com.huifrank.core.CacheIndexType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +19,17 @@ public class CacheIndex {
 
     /** 仅普通索引有值 表示其关联的聚簇索引*/
     String refIndex;
+
+    public CacheIndex(CacheIndexType indexType,String name,String refIndex){
+        this.indexType = indexType;
+        this.name = name;
+        this.refIndex = refIndex;
+    }
+
+    CacheStructure structure;
+
+    Mapping mapping;
+
 
 
 

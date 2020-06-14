@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Persistent;
 import java.lang.annotation.*;
 
 /**
- * 更新缓存
+ * 写入缓存
  */
 @Persistent
 @Inherited

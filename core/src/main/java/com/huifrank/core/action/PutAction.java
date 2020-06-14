@@ -101,6 +101,7 @@ public class PutAction {
                 .setName(normalIndex.getName());
 
         putExpression.setValueTerm(new ReflectTerm().setFieldName(normalIndex.getName()).setValueIndex(curParam.getIndex()));
+        putExpression.setCacheStructure(normalIndex.getStructure());
 
         return putExpression;
 

@@ -1,8 +1,10 @@
 package com.huifrank.demo.dal.impl;
 
 import com.huifrank.annotation.CacheFor;
+import com.huifrank.annotation.action.Put;
 import com.huifrank.annotation.action.Query;
 import com.huifrank.demo.dal.StudentDal;
+import com.huifrank.demo.entity.BankCard;
 import com.huifrank.demo.entity.Student;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,17 @@ public class StudentDalImpl implements StudentDal {
 
 
     @Override
-    @Query(where = "teacherId",result = "Student")
+    @Query(where = "classId",result = "Student")
     @CacheFor(bufferEntity = Student.class)
-    public List<Student> queryByTeacherId(long teacherId){
+    public List<Student> queryByClassId(long classId){
         return Collections.emptyList();
+    }
+
+    @Override
+    @CacheFor(bufferEntity = Student.class)
+    @Put
+    public void insert(Student student){
+
     }
 
 }

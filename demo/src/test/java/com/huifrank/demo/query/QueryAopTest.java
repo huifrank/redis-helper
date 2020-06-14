@@ -56,6 +56,6 @@ public class QueryAopTest {
     @Test
     public void testQueryMulGet(){
 
-        studentDal.queryByTeacherId(123123);
+        studentDal.queryByClassId(123123);
     }
 }

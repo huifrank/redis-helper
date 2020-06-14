@@ -3,7 +3,9 @@ package com.huifrank.demo.put;
 import com.huifrank.core.executor.impl.PutExe4Test;
 import com.huifrank.demo.RedisHelperDemoRunner;
 import com.huifrank.demo.dal.BankCardDal;
+import com.huifrank.demo.dal.StudentDal;
 import com.huifrank.demo.entity.BankCard;
+import com.huifrank.demo.entity.Student;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ public class PutAopTest {
     @Autowired
     BankCardDal bankCardDal;
 
+    @Autowired
+    StudentDal studentDal;
 
     PutExe4Test exe4Test = PutExe4Test.getInstance();
 
@@ -32,5 +36,13 @@ public class PutAopTest {
                 ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:mobile:(->[0]).mobile # [0].mobile"))
         );
         Assertions.assertEquals(4,exe4Test.expSize());
+    }
+
+    @Test
+    public void testStudentClassPut(){
+        Student student = new Student();
+        student.setName("name_aaa");
+        student.setClassId(12321L);
+        studentDal.insert(student);
     }
 }

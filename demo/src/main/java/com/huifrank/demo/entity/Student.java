@@ -16,10 +16,10 @@ public class Student {
 
     /**
      * 映射为 one -> many
-     * 一个老师下会对应多个学生
+     * 一个班级下会对应多个学生
      */
     @Indexed(ref = "id",mapping = Mapping.many,structure = CacheStructure.Lists)
-    private long teacherId;
+    private long classId;
 
     private String name;
 
