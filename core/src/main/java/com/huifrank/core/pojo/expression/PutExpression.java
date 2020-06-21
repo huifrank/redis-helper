@@ -20,6 +20,6 @@ public class PutExpression extends BinaryExpression {
     }
     @Override
     public String toString(){
-        return super.toString() + " # " + valueTerm;
+        return cacheStructure +"["+ super.toString() + " # " + valueTerm;
     }
 }

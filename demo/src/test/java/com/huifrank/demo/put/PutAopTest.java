@@ -30,10 +30,10 @@ public class PutAopTest {
         bankCardDal.put(bankCard);
 
 
-        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->[0]).id # [0]")),
-                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:indexCardId:(->[0]).indexCardId # [0]")),
-                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:cardNo:(->[0]).cardNo # [0].cardNo")),
-                ()->Assertions.assertTrue(exe4Test.containsExp("->bankCard:mobile:(->[0]).mobile # [0].mobile"))
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("Strings[->bankCard:id:(->[0]).id # [0]")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("Strings[->bankCard:indexCardId:(->[0]).indexCardId # [0]")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("Strings[->bankCard:cardNo:(->[0]).cardNo # [0].cardNo")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("Strings[->bankCard:mobile:(->[0]).mobile # [0].mobile"))
         );
         Assertions.assertEquals(4,exe4Test.expSize());
     }
@@ -44,5 +44,11 @@ public class PutAopTest {
         student.setName("name_aaa");
         student.setClassId(12321L);
         studentDal.insert(student);
+
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("Strings[->student:id:(->[0]).id # [0]")),
+                ()->Assertions.assertTrue(exe4Test.containsExp("Lists[->student:classId:(->[0]).classId # [0].classId"))
+        );
+        Assertions.assertEquals(2,exe4Test.expSize());
+
     }
 }
