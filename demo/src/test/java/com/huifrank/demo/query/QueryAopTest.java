@@ -1,5 +1,6 @@
 package com.huifrank.demo.query;
 
+import com.huifrank.core.executor.impl.PutExe4Test;
 import com.huifrank.core.executor.impl.QueryExe4Test;
 import com.huifrank.demo.RedisHelperDemoRunner;
 import com.huifrank.demo.dal.BankCardDal;
@@ -19,15 +20,18 @@ public class QueryAopTest {
     @Autowired
     StudentDal studentDal;
 
-    QueryExe4Test exe4Test = QueryExe4Test.getInstance();
+    QueryExe4Test exe4Test_query = QueryExe4Test.getInstance();
+
+    PutExe4Test exe4Test_put = PutExe4Test.getInstance();
+
 
     @Test
     public void testSimpleQuery(){
 
         BankCard bankCard = bankCardDal.queryById("1");
 
-        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:[0]")));
-        Assertions.assertEquals(1,exe4Test.expSize());
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test_query.containsExp("one:->bankCard:id:[0]")));
+        Assertions.assertEquals(1,exe4Test_query.expSize());
     }
 
     @Test
@@ -35,16 +39,16 @@ public class QueryAopTest {
 
         String id = bankCardDal.queryIdByCardNo("cardNo_123123");
 
-        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:cardNo:[0]")));
-        Assertions.assertEquals(1,exe4Test.expSize());
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test_query.containsExp("one:->bankCard:cardNo:[0]")));
+        Assertions.assertEquals(1,exe4Test_query.expSize());
     }
     @Test
     public void testSimpleQueryAll(){
         bankCardDal.queryByCardNo("cardNo_123123");
 
 
-        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test.containsExp("->bankCard:id:(->bankCard:cardNo:[0])")));
-        Assertions.assertEquals(1,exe4Test.expSize());
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test_query.containsExp("one:->bankCard:id:(one:->bankCard:cardNo:[0])")));
+        Assertions.assertEquals(1,exe4Test_query.expSize());
 
     }
 
@@ -57,5 +61,12 @@ public class QueryAopTest {
     public void testQueryMulGet(){
 
         studentDal.queryByClassId(123123);
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test_query.containsExp("one:->student:id:(many:->student:classId:[0])")),
+
+                ()->Assertions.assertTrue(exe4Test_put.containsExp("Strings[->student:id:(one:->[0]).id # [0]")),
+                ()->Assertions.assertTrue(exe4Test_put.containsExp("Strings[->student:classId:(one:->[0]).classId # [0].classId"))
+        );
+        Assertions.assertEquals(1,exe4Test_query.expSize());
+        Assertions.assertEquals(2,exe4Test_put.expSize());
     }
 }

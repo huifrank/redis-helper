@@ -191,7 +191,6 @@ public class QueryAction {
      * @return
      */
     public GetExpression normalIndex(List<CacheIndex>  cacheIndices,CacheIndex cacheIndex,ParamMap param,String prefix,Result result){
-        String normal = prefix+ CacheContext.CACHE_SPLIT+cacheIndex.getName()+CacheContext.CACHE_SPLIT;
 
         CacheIndex cluster = cacheIndices.stream().filter(c -> c.getName().equals(cacheIndex.getRefIndex())).findFirst().orElseThrow(()->new RuntimeException("普通索引必须关联有聚簇索引"));
         String clusterName = prefix+ CacheContext. CACHE_SPLIT+cluster.getName() + CacheContext.CACHE_SPLIT;
@@ -202,7 +201,8 @@ public class QueryAction {
                 .setCacheIndexType(CacheIndexType.ClusterIndex)
                 .setName(cluster.getName());
 
-        GetExpression before = new GetExpression();
+        String normal = prefix+ CacheContext.CACHE_SPLIT+cacheIndex.getName()+CacheContext.CACHE_SPLIT;
+        GetExpression before = new GetExpression().setMapping(cacheIndex.getMapping()).setCacheStructure(cacheIndex.getStructure());
         before.setCacheTerm(new CacheTerm(normal).setValueIndex(param.getIndex()))
                 .setCacheIndexType(CacheIndexType.NormalIndex)
                 .setName(param.getName());
