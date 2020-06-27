@@ -105,12 +105,13 @@ public class IndexResolver {
     /**
      * 仅普通索引，不做关联
      */
-    private GetDelExpression normalIndexOnly(final String prefix, ParamMap curParam){
+    private GetDelExpression normalIndexOnly(final String prefix, ParamMap curParam,CacheIndex cacheIndex){
 
 
         String normal = prefix+CacheContext. CACHE_SPLIT+curParam.getName()+CacheContext.CACHE_SPLIT;
 
         GetDelExpression before = new GetDelExpression();
+        before.setCacheStructure(cacheIndex.getStructure());
         before.setCacheTerm(new CacheTerm(normal).setValueIndex(curParam.getIndex()))
                 .setCacheIndexType(CacheIndexType.NormalIndex)
                 .setName(curParam.getName());
@@ -130,7 +131,7 @@ public class IndexResolver {
                 .get(cacheIndex.getRefIndex());
         String cluster = prefix+ CacheContext. CACHE_SPLIT+clusterType.getName()+CacheContext.CACHE_SPLIT;
 
-        GetDelExpression before = normalIndexOnly(prefix,curParam);
+        GetDelExpression before = normalIndexOnly(prefix,curParam, cacheIndex);
         //关联到聚簇索引
         DelExpression delExpression = new DelExpression();
         delExpression.setCacheTerm(new CacheTerm(cluster).setBefore(before))

@@ -11,4 +11,6 @@ public interface StudentDal {
     List<Student> queryByClassId(long classId);
 
     void insert(Student student);
+
+    void delByClassId(long classId);
 }

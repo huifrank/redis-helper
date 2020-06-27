@@ -1,6 +1,7 @@
 package com.huifrank.demo.dal.impl;
 
 import com.huifrank.annotation.CacheFor;
+import com.huifrank.annotation.action.Evict;
 import com.huifrank.annotation.action.Put;
 import com.huifrank.annotation.action.Query;
 import com.huifrank.demo.dal.StudentDal;
@@ -26,6 +27,13 @@ public class StudentDalImpl implements StudentDal {
     @CacheFor(bufferEntity = Student.class)
     @Put
     public void insert(Student student){
+
+    }
+
+    @Override
+    @Evict
+    @CacheFor(bufferEntity = Student.class)
+    public void delByClassId(long classId) {
 
     }
 
