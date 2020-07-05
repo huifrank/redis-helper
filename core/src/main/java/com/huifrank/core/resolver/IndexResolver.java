@@ -112,6 +112,7 @@ public class IndexResolver {
 
         GetDelExpression before = new GetDelExpression();
         before.setCacheStructure(cacheIndex.getStructure());
+        before.setMapping(cacheIndex.getMapping());
         before.setCacheTerm(new CacheTerm(normal).setValueIndex(curParam.getIndex()))
                 .setCacheIndexType(CacheIndexType.NormalIndex)
                 .setName(curParam.getName());

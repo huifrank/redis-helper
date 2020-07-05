@@ -1,6 +1,7 @@
 package com.huifrank.core.pojo.expression;
 
 import com.huifrank.annotation.CacheStructure;
+import com.huifrank.annotation.Mapping;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,6 +13,9 @@ public class GetDelExpression extends SoloExpression{
         return Type.GET_DEL;
     }
     private CacheStructure cacheStructure = CacheStructure.Strings;
+
+    private Mapping mapping = Mapping.one;
+
 
 
 
