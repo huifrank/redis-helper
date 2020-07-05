@@ -82,6 +82,7 @@ public class QueryAction {
             if(proceed != null) {
                 //加缓存
                 List<PutExpression> putExpressions = decidePutCachePlan(prefix, result, proceed, cacheIndices);
+                setExpireTimesIfNeed(putExpressions,bufferEntity.expireIn());
                 executePut(putExpressions,proceed);
             }
 
@@ -228,6 +229,11 @@ public class QueryAction {
     private boolean needProceed(Object cacheResult){
         //todo impl
         return true;
+    }
+    private void setExpireTimesIfNeed(List<PutExpression> expressions,long expireIn){
+        if(expireIn > 0){
+            expressions.forEach( ex -> ex.setExpireIn(expireIn));
+        }
     }
 
     private void executePut(List<PutExpression> putExpression,Object args) {

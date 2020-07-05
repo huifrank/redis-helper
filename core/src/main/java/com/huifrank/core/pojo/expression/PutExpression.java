@@ -14,6 +14,8 @@ public class PutExpression extends BinaryExpression {
 
     private CacheStructure cacheStructure = CacheStructure.Strings;
 
+    private Long expireIn;
+
     @Override
     public Type ExpressionType() {
         return Type.PUT;

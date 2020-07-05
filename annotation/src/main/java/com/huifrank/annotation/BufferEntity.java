@@ -11,4 +11,6 @@ import java.lang.annotation.*;
 public @interface BufferEntity {
 
     String keyPrefix();
+
+    long expireIn() default -1L;
 }

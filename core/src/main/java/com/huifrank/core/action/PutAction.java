@@ -75,6 +75,7 @@ public class PutAction {
 
         }).collect(Collectors.toList());
 
+        setExpireTimesIfNeed(expressions,bufferEntity.expireIn());
 
         return proceedAndExecute(expressions,joinPoint.getArgs(),joinPoint);
     }
@@ -105,6 +106,12 @@ public class PutAction {
 
         return putExpression;
 
+    }
+
+    private void setExpireTimesIfNeed(List<PutExpression> expressions,long expireIn){
+       if(expireIn > 0){
+           expressions.forEach( ex -> ex.setExpireIn(expireIn));
+       }
     }
 
 

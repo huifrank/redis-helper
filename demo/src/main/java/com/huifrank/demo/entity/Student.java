@@ -7,7 +7,8 @@ import com.huifrank.annotation.index.ClusterIndex;
 import com.huifrank.annotation.index.Indexed;
 import lombok.Data;
 
-@BufferEntity(keyPrefix = "student")
+//1.5小时过期
+@BufferEntity(keyPrefix = "student",expireIn = 5400000L)
 @Data
 public class Student {
 
