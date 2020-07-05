@@ -146,10 +146,17 @@ public class QueryAction {
      */
     private GetExpression decideQueryCachePlan(List<CacheIndex> cacheIndices,List<ParamMap> params,Result result,String prefix){
 
-        //查询类型
 
-        ParamMap param = params.get(0);
-        Optional<CacheIndex> relateIndex = cacheIndices.stream().filter(index -> index.getName().equals(param.getName())).findFirst();
+        //如果有多个查询入参 选取一个由关联索引的
+        ParamMap param = null;
+        Optional<CacheIndex> relateIndex = Optional.empty();
+        for(ParamMap cur : params) {
+            relateIndex = cacheIndices.stream().filter(index -> index.getName().equals(cur.getName())).findFirst();
+            if(relateIndex.isPresent()){
+                param = cur;
+                break;
+            }
+        }
 
         CacheIndex cacheIndex = relateIndex.orElseThrow(()->new RuntimeException("入参未关联索引"));
         GetExpression getExpression;
