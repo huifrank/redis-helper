@@ -8,6 +8,7 @@
         <module>demo</module>
         <module>core</module>
         <module>executer</module>
+        <module>common</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

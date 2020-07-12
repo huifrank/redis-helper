@@ -4,10 +4,9 @@ import com.huifrank.annotation.CacheStructure;
 import com.huifrank.annotation.Mapping;
 import com.huifrank.annotation.index.ClusterIndex;
 import com.huifrank.annotation.index.Indexed;
-import com.huifrank.core.CacheIndexType;
-import com.huifrank.core.pojo.CacheIndex;
+import com.huifrank.common.CacheIndexType;
+import com.huifrank.common.pojo.CacheIndex;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;

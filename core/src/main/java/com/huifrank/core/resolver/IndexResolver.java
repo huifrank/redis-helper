@@ -1,11 +1,11 @@
 package com.huifrank.core.resolver;
 
+import com.huifrank.common.CacheIndexType;
 import com.huifrank.core.context.CacheContext;
-import com.huifrank.core.CacheIndexType;
-import com.huifrank.core.pojo.CacheIndex;
-import com.huifrank.core.pojo.expression.*;
-import com.huifrank.core.pojo.ParamMap;
-import com.huifrank.core.pojo.term.CacheTerm;
+import com.huifrank.common.pojo.CacheIndex;
+import com.huifrank.common.pojo.expression.*;
+import com.huifrank.common.pojo.ParamMap;
+import com.huifrank.common.pojo.term.CacheTerm;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;

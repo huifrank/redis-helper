@@ -1,10 +1,8 @@
 package com.huifrank.core.context;
 
-import com.huifrank.core.pojo.CacheIndex;
-import com.huifrank.core.pojo.expression.Expression;
-import com.huifrank.core.pojo.expression.GetExpression;
-import com.huifrank.core.pojo.ParamMap;
-import com.huifrank.core.pojo.expression.SoloExpression;
+import com.huifrank.common.pojo.CacheIndex;
+import com.huifrank.common.pojo.ParamMap;
+import com.huifrank.common.pojo.expression.SoloExpression;
 import com.huifrank.core.resolver.BufferEntityResolver;
 import com.huifrank.core.resolver.ParamsResolver;
 

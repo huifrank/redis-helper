@@ -1,6 +1,6 @@
 package com.huifrank.demo.put;
 
-import com.huifrank.core.executor.impl.PutExe4Test;
+import com.huifrank.executor.impl.PutExe4Test;
 import com.huifrank.demo.RedisHelperDemoRunner;
 import com.huifrank.demo.dal.BankCardDal;
 import com.huifrank.demo.dal.StudentDal;

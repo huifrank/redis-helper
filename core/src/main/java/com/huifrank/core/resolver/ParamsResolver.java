@@ -1,8 +1,8 @@
 package com.huifrank.core.resolver;
 
 import com.huifrank.annotation.Field;
-import com.huifrank.core.pojo.CacheIndex;
-import com.huifrank.core.pojo.ParamMap;
+import com.huifrank.common.pojo.CacheIndex;
+import com.huifrank.common.pojo.ParamMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 

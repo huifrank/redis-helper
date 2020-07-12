@@ -1,7 +1,7 @@
 package com.huifrank.demo.query;
 
-import com.huifrank.core.executor.impl.PutExe4Test;
-import com.huifrank.core.executor.impl.QueryExe4Test;
+import com.huifrank.executor.impl.PutExe4Test;
+import com.huifrank.executor.impl.QueryExe4Test;
 import com.huifrank.demo.RedisHelperDemoRunner;
 import com.huifrank.demo.dal.BankCardDal;
 import com.huifrank.demo.dal.StudentDal;
