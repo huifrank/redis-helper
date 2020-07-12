@@ -1,5 +1,9 @@
 package com.huifrank.annotation;
 
+import lombok.Data;
+
+import java.util.List;
+
 /**
  * 针对查询入参有多个查询参数的情况下：
  *  如果根据其中一个入参去关联索引查询
@@ -7,5 +11,13 @@ package com.huifrank.annotation;
  */
 public interface MemoryFilter<T> {
 
-    T doFilter(T obj);
+    List<T> doFilter(List<T> list,List<Param> params);
+
+    @Data
+    class Param{
+        Object value;
+
+        String attributeName;
+
+    }
 }
