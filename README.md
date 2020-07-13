@@ -1,6 +1,5 @@
 # redis-helper
 
-huifrank01#gmail.com
 
 *根据配置自动生成对应的缓存操作。*
 
