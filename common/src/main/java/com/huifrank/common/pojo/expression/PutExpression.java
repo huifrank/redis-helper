@@ -3,9 +3,11 @@ package com.huifrank.common.pojo.expression;
 import com.huifrank.annotation.CacheStructure;
 import com.huifrank.common.pojo.term.ReflectTerm;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class PutExpression extends BinaryExpression {
 

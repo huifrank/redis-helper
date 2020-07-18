@@ -2,6 +2,7 @@ package com.huifrank.core.action;
 
 import com.huifrank.annotation.BufferEntity;
 import com.huifrank.annotation.CacheFor;
+import com.huifrank.annotation.MemoryFilter;
 import com.huifrank.annotation.action.Query;
 import com.huifrank.common.CacheIndexType;
 import com.huifrank.core.context.CacheContext;
@@ -74,6 +75,10 @@ public class QueryAction {
         GetExpression expression = decideQueryCachePlan(cacheIndices, paramMaps, result,prefix);
 
 
+        /**
+         * 这个execute需要包装一下
+         * 需含有obj类型，集合还是单个对象等信息
+         */
         Object execute = executeGet(expression,joinPoint.getArgs());
 
         //是否需要执行原方法
@@ -89,6 +94,7 @@ public class QueryAction {
             return proceed;
 
         }
+
 
         return execute;
 
@@ -163,11 +169,11 @@ public class QueryAction {
         GetExpression getExpression;
         switch (cacheIndex.getIndexType()){
             case ClusterIndex:
-                    getExpression = clusterIndex(cacheIndex,param,prefix);
-                    break;
-                case NormalIndex:
-                    getExpression = normalIndex(cacheIndices,cacheIndex,param,prefix,result);
-                    break;
+                getExpression = clusterIndex(cacheIndex,param,prefix);
+                break;
+            case NormalIndex:
+                getExpression = normalIndex(cacheIndices,cacheIndex,param,prefix,result);
+                break;
             default: throw new RuntimeException("不支持的索引类型");
 
         }
