@@ -1,14 +1,15 @@
 package com.huifrank.demo.entity;
 
 import com.huifrank.annotation.BufferEntity;
-import com.huifrank.annotation.CacheStructure;
-import com.huifrank.annotation.Mapping;
+import com.huifrank.common.CacheStructure;
+import com.huifrank.common.Mapping;
 import com.huifrank.annotation.index.ClusterIndex;
 import com.huifrank.annotation.index.Indexed;
+import com.huifrank.demo.Filter.StudentFilter;
 import lombok.Data;
 
 //1.5小时过期
-@BufferEntity(keyPrefix = "student",expireIn = 5400000L)
+@BufferEntity(keyPrefix = "student",expireIn = 5400000L,memoryFilter = StudentFilter.class)
 @Data
 public class Student {
 

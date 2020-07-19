@@ -33,6 +33,7 @@ public class ParamsResolver {
                 return Collections.singletonList(new ParamMap(name,String.valueOf(index),p.getType().getTypeName()));
             }
 
+            //只支持一级"."
             Stream<ParamMap> paramMapStream = select.stream()
                     .map(c -> {
                         if(c.indexOf(".") == -1){

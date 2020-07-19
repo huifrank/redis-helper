@@ -1,7 +1,7 @@
 package com.huifrank.common.pojo;
 
-import com.huifrank.annotation.CacheStructure;
-import com.huifrank.annotation.Mapping;
+import com.huifrank.common.CacheStructure;
+import com.huifrank.common.Mapping;
 import com.huifrank.common.CacheIndexType;
 import lombok.AllArgsConstructor;
 import lombok.Data;

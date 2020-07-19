@@ -1,7 +1,7 @@
 package com.huifrank.core.resolver;
 
-import com.huifrank.annotation.CacheStructure;
-import com.huifrank.annotation.Mapping;
+import com.huifrank.common.CacheStructure;
+import com.huifrank.common.Mapping;
 import com.huifrank.annotation.index.ClusterIndex;
 import com.huifrank.annotation.index.Indexed;
 import com.huifrank.common.CacheIndexType;

@@ -1,6 +1,6 @@
 package com.huifrank.common.pojo.expression;
 
-import com.huifrank.annotation.CacheStructure;
+import com.huifrank.common.CacheStructure;
 import com.huifrank.common.pojo.term.ReflectTerm;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

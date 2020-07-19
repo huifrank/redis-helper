@@ -1,7 +1,7 @@
 package com.huifrank.annotation.index;
 
-import com.huifrank.annotation.CacheStructure;
-import com.huifrank.annotation.Mapping;
+import com.huifrank.common.CacheStructure;
+import com.huifrank.common.Mapping;
 import org.springframework.data.annotation.Persistent;
 
 import java.lang.annotation.*;

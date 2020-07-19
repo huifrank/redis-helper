@@ -12,11 +12,7 @@
     <artifactId>common</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>com.huifrank</groupId>
-            <artifactId>annotation</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

@@ -13,4 +13,8 @@ public @interface BufferEntity {
     String keyPrefix();
 
     long expireIn() default -1L;
+
+    Class<? extends MemoryFilter> memoryFilter() default MemoryFilter.DefaultFilter.class ;
+
+
 }

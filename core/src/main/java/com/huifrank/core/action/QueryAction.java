@@ -94,6 +94,9 @@ public class QueryAction {
             return proceed;
 
         }
+        MemoryFilter memoryFilter = bufferEntity.memoryFilter().newInstance();
+        //todo  list类型
+        memoryFilter.doFilter((List) execute,MemoryFilter.ofParams(joinPoint.getArgs(), paramMaps));
 
 
         return execute;

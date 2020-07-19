@@ -1,4 +1,4 @@
-package com.huifrank.annotation;
+package com.huifrank.common;
 
 /**
  * 映射关系

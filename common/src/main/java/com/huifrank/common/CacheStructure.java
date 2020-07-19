@@ -1,4 +1,4 @@
-package com.huifrank.annotation;
+package com.huifrank.common;
 
 /**
  * 底层缓存使用的数据结构
