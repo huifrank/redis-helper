@@ -1,5 +1,6 @@
 package com.huifrank.core.resolver;
 
+import com.huifrank.annotation.index.HashesIndex;
 import com.huifrank.common.CacheStructure;
 import com.huifrank.common.Mapping;
 import com.huifrank.annotation.index.ClusterIndex;
@@ -30,11 +31,14 @@ public class BufferEntityResolver {
         List<CacheIndex> fieldCache = new ArrayList<>();
         ClusterIndex clusterIndex = field.getAnnotation(ClusterIndex.class);
         Indexed indexed = field.getAnnotation(Indexed.class);
+        HashesIndex hashesIndex = field.getAnnotation(HashesIndex.class);
 
         if(clusterIndex != null) {
             fieldCache.add(new CacheIndex(CacheIndexType.ClusterIndex ,field.getName(),null, CacheStructure.Strings,Mapping.one));
         } else if(indexed != null) {
             fieldCache.add(new CacheIndex(CacheIndexType.NormalIndex ,field.getName(),indexed.ref(),indexed.structure(),indexed.mapping()));
+        } else if(hashesIndex != null){
+            fieldCache.add(new CacheIndex(CacheIndexType.HashesIndex ,field.getName(),null,CacheStructure.Hashes,Mapping.many));
         }
         return fieldCache;
     }

@@ -1,5 +1,7 @@
 package com.huifrank.demo.query;
 
+import com.huifrank.demo.dal.FacultyClassDal;
+import com.huifrank.demo.entity.FacultyClass;
 import com.huifrank.executor.impl.PutExe4Test;
 import com.huifrank.executor.impl.QueryExe4Test;
 import com.huifrank.demo.RedisHelperDemoRunner;
@@ -19,6 +21,9 @@ public class QueryAopTest {
 
     @Autowired
     StudentDal studentDal;
+
+    @Autowired
+    FacultyClassDal facultyClassDal;
 
     QueryExe4Test exe4Test_query = QueryExe4Test.getInstance();
 
@@ -64,9 +69,18 @@ public class QueryAopTest {
         Assertions.assertAll(()-> Assertions.assertTrue(exe4Test_query.containsExp("one:->student:id:(many:->student:classId:[0])")),
 
                 ()->Assertions.assertTrue(exe4Test_put.containsExp("Strings[->student:id:(one:->[0]).id # [0]")),
-                ()->Assertions.assertTrue(exe4Test_put.containsExp("Strings[->student:classId:(one:->[0]).classId # [0].classId"))
+                ()->Assertions.assertTrue(exe4Test_put.containsExp("Lists[->student:classId:(one:->[0]).classId # [0].classId"))
         );
         Assertions.assertEquals(1,exe4Test_query.expSize());
         Assertions.assertEquals(2,exe4Test_put.expSize());
+    }
+    @Test
+    public void testHashQuery(){
+        facultyClassDal.queryById(1l);
+        Assertions.assertAll(()-> Assertions.assertTrue(exe4Test_query.containsExp("one:->facultyClass:id,[0]")),
+                ()->Assertions.assertTrue(exe4Test_put.containsExp("Hashes[->facultyClass:id,(one:->[0]).id # [0]"))
+        );
+        Assertions.assertEquals(1,exe4Test_query.expSize());
+        Assertions.assertEquals(1,exe4Test_put.expSize());
     }
 }

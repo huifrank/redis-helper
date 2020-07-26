@@ -5,6 +5,7 @@ import com.huifrank.annotation.CacheFor;
 import com.huifrank.annotation.MemoryFilter;
 import com.huifrank.annotation.action.Query;
 import com.huifrank.common.CacheIndexType;
+import com.huifrank.common.CacheStructure;
 import com.huifrank.core.context.CacheContext;
 import com.huifrank.executor.*;
 import com.huifrank.executor.impl.PutExe4Test;
@@ -115,6 +116,7 @@ public class QueryAction {
 
             return cacheIndices.stream().map(index -> {
                 PutExpression putExpression = new PutExpression();
+                putExpression.setCacheStructure(index.getStructure());
                 switch (index.getIndexType()){
                     case NormalIndex:
                         GetExpression nBefore = new GetExpression();
@@ -127,6 +129,13 @@ public class QueryAction {
                         GetExpression cBefore = new GetExpression();
                         cBefore.setCacheTerm(new CacheTerm().setValueIndex("0"));
                         putExpression.setKeyCacheTerm(new CacheTerm(prefix+ CacheContext.CACHE_SPLIT+index.getName()+CacheContext.CACHE_SPLIT).setBefore(cBefore).setRefBeforeName(index.getName()));
+                        putExpression.setName(index.getName());
+                        putExpression.setValueTerm(new ReflectTerm().setValueIndex("0"));
+                        return putExpression;
+                    case HashesIndex:
+                        GetExpression hBefore = new GetExpression();
+                        hBefore.setCacheTerm(new CacheTerm().setValueIndex("0"));
+                        putExpression.setKeyCacheTerm(new CacheTerm(prefix+ CacheContext.CACHE_SPLIT+index.getName()+CacheContext.HASHES_SPLIT).setBefore(hBefore).setRefBeforeName(index.getName()));
                         putExpression.setName(index.getName());
                         putExpression.setValueTerm(new ReflectTerm().setValueIndex("0"));
                         return putExpression;
@@ -177,6 +186,9 @@ public class QueryAction {
             case NormalIndex:
                 getExpression = normalIndex(cacheIndices,cacheIndex,param,prefix,result);
                 break;
+            case HashesIndex:
+                getExpression = hashesIndex(cacheIndex,param,prefix);
+                break;
             default: throw new RuntimeException("不支持的索引类型");
 
         }
@@ -186,6 +198,17 @@ public class QueryAction {
 
     }
 
+    public GetExpression hashesIndex(CacheIndex cacheIndex , ParamMap param,String prefix){
+        String normal = prefix+ CacheContext.CACHE_SPLIT+cacheIndex.getName()+CacheContext.HASHES_SPLIT;
+
+        GetExpression before = new GetExpression();
+        before.setCacheTerm(new CacheTerm(normal).setValueIndex(param.getIndex()))
+                .setCacheIndexType(CacheIndexType.HashesIndex)
+                .setName(param.getName());
+
+        return before;
+
+    }
     public GetExpression clusterIndex(CacheIndex cacheIndex , ParamMap param,String prefix){
         String normal = prefix+ CacheContext.CACHE_SPLIT+cacheIndex.getName()+CacheContext.CACHE_SPLIT;
 

@@ -7,4 +7,6 @@ public enum CacheIndexType {
 
     /**普通索引*/
     NormalIndex,
+
+    HashesIndex
 }

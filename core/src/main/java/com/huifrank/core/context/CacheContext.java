@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CacheContext {
 
     public static final String CACHE_SPLIT =":";
+    public static final String HASHES_SPLIT =",";
 
     BufferEntityResolver entityResolver = new BufferEntityResolver();
 
