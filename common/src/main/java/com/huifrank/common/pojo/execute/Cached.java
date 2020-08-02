@@ -9,9 +9,8 @@ public class Cached {
 
     Object data;
 
-    CacheStructure cacheStructure = CacheStructure.Strings;
 
-    TypeReference typeReference;
+    CacheStructure cacheStructure = CacheStructure.Strings;
 
 
 

@@ -6,6 +6,7 @@ import com.huifrank.annotation.MemoryFilter;
 import com.huifrank.annotation.action.Query;
 import com.huifrank.common.CacheIndexType;
 import com.huifrank.common.CacheStructure;
+import com.huifrank.common.pojo.execute.Cached;
 import com.huifrank.core.context.CacheContext;
 import com.huifrank.executor.*;
 import com.huifrank.executor.impl.PutExe4Test;
@@ -80,7 +81,7 @@ public class QueryAction {
          * 这个execute需要包装一下
          * 需含有obj类型，集合还是单个对象等信息
          */
-        Object execute = executeGet(expression,joinPoint.getArgs());
+        Cached execute = (Cached) executeGet(expression,joinPoint.getArgs());
 
         //是否需要执行原方法
         if(needProceed(execute)){
@@ -97,10 +98,10 @@ public class QueryAction {
         }
         MemoryFilter memoryFilter = bufferEntity.memoryFilter().newInstance();
         //todo  list类型
-        memoryFilter.doFilter((List) execute,MemoryFilter.ofParams(joinPoint.getArgs(), paramMaps));
+        List list = memoryFilter.doFilter((List) execute.getData(), MemoryFilter.ofParams(joinPoint.getArgs(), paramMaps));
 
 
-        return execute;
+        return list;
 
     }
 
@@ -258,7 +259,7 @@ public class QueryAction {
     }
 
 
-    private boolean needProceed(Object cacheResult){
+    private boolean needProceed(Cached cacheResult){
         //todo impl
         return true;
     }

@@ -4,6 +4,7 @@ import com.huifrank.annotation.CacheFor;
 import com.huifrank.annotation.action.Evict;
 import com.huifrank.annotation.action.Put;
 import com.huifrank.annotation.action.Query;
+import com.huifrank.common.pojo.execute.TypeReference;
 import com.huifrank.demo.dal.StudentDal;
 import com.huifrank.demo.entity.BankCard;
 import com.huifrank.demo.entity.Student;

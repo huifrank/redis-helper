@@ -1,5 +1,6 @@
 package com.huifrank.annotation.action;
 
+import com.huifrank.common.pojo.execute.TypeReference;
 import org.springframework.data.annotation.Persistent;
 
 import java.lang.annotation.*;
