@@ -1,0 +1,10 @@
+com.huifrank.demo.entity.BankCard
+:bankCard
+
+
+@ClusterIndex
+id,indexCardId
+
+@Indexed
+cardNo -> id
+mobile -> indexCardId
