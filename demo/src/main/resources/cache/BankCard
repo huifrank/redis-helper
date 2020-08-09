@@ -1,10 +1,13 @@
-com.huifrank.demo.entity.BankCard
-:bankCard
-
+@Class
+    com.huifrank.demo.entity.BankCard
+@end
 
 @ClusterIndex
-id,indexCardId
+    id
+    indexCardId
+@end
 
 @Indexed
-cardNo -> id
-mobile -> indexCardId
+    cardNo -> id
+    mobile -> indexCardId
+@end
