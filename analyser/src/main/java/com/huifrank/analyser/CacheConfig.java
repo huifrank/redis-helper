@@ -18,6 +18,10 @@ public abstract class CacheConfig {
 
     Map<String,Indexed> indexedMap = new HashMap<>();
 
+    static {
+
+    }
+
 
     public CacheConfig(Class clazz){
         this.clazz = clazz;

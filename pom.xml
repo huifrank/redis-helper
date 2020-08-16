@@ -5,7 +5,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>annotation</module>
-        <module>demo</module>
         <module>core</module>
         <module>executer</module>
         <module>common</module>
@@ -63,8 +62,20 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.huifrank</groupId>
+                            <artifactId>processor</artifactId>
+                            <version>0.0.1-SNAPSHOT</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -1,11 +1,12 @@
-package com.huifrank;
+package com.huifrank.demo.config;
 
 
 import com.huifrank.analyser.CacheConfig;
 import com.huifrank.common.util.invoker.InvokeInStatic;
+import com.huifrank.demo.entity.BankCard;
 
 
-public class BankCardConfig  {
+public class BankCardConfig {
 
 
     @InvokeInStatic
