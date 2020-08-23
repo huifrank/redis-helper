@@ -4,21 +4,15 @@ import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.huifrank.common.util.invoker.InvokeInStatic;
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.internal.compiler.ASTVisitor;
-import org.eclipse.jdt.internal.compiler.apt.dispatch.BaseProcessingEnvImpl;
-import org.eclipse.jdt.internal.compiler.apt.model.Factory;
-import org.eclipse.jdt.internal.compiler.apt.model.VariableElementImpl;
+import org.eclipse.jdt.core.dom.Initializer;
 
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.AnnotationValue;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 import javax.lang.model.util.Elements;
-import java.util.Arrays;
-import java.util.Map;
+import javax.lang.model.util.SimpleElementVisitor8;
+import javax.lang.model.util.Types;
 import java.util.Set;
 
 @AutoService(InvokeInStatic.class)
@@ -29,6 +23,7 @@ public class InvokeInStaticProcessor extends AbstractProcessor {
     private Messager messager;
     private Elements elementUtils;
     private Filer filer;
+    private Types typeUtils;
     private ProcessingEnvironment processingEnv;
 
 
@@ -36,10 +31,14 @@ public class InvokeInStaticProcessor extends AbstractProcessor {
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
         messager = processingEnv.getMessager();
-        elementUtils = processingEnv.getElementUtils();
-        filer = processingEnv.getFiler();
+        this.elementUtils = processingEnv.getElementUtils();
+        this.filer = processingEnv.getFiler();
+        this.typeUtils = processingEnv.getTypeUtils();
         this.processingEnv = processingEnv;
     }
+
+
+
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         return ImmutableSet.of(InvokeInStatic.class.getCanonicalName());
@@ -56,13 +55,19 @@ public class InvokeInStaticProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 
-        Set<? extends Element> elementsAnnotatedWith = roundEnv.getElementsAnnotatedWith(InvokeInStatic.class);
-        elementsAnnotatedWith.forEach(ele->{
-
-
-
-
+        Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(InvokeInStatic.class);
+        elements.forEach(element -> {
+            element.accept(new SimpleElementVisitor8<TypeElement,Object>(){
+                @Override
+                public TypeElement visitType(TypeElement e, Object o) {
+                    //静态代码块
+                    AST ast = AST.newAST(AST.JLS8);
+                    Initializer initializer = ast.newInitializer();
+                    return super.visitType(e, o);
+                }
+            },null);
         });
+
 
         return false;
     }
