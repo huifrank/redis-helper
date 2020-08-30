@@ -35,6 +35,16 @@
         </dependency>
         <dependency>
             <groupId>com.huifrank</groupId>
+            <artifactId>analyser</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.huifrank</groupId>
+            <artifactId>processor</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.huifrank</groupId>
             <artifactId>common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

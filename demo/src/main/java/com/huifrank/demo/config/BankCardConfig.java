@@ -1,16 +1,18 @@
 package com.huifrank.demo.config;
 
 
+import com.google.auto.service.AutoService;
+import com.huifrank.analyser.ByInvoked;
 import com.huifrank.analyser.CacheConfig;
-import com.huifrank.common.util.invoker.InvokeInStatic;
 import com.huifrank.demo.entity.BankCard;
 
 
-public class BankCardConfig {
+@AutoService(ByInvoked.class)
+public class BankCardConfig implements ByInvoked {
 
 
-    @InvokeInStatic
-    public void bankCardConfig() {
+    @Override
+    public void doInvoke() {
 
         new CacheConfig(BankCard.class){
             {

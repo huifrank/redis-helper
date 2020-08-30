@@ -59,12 +59,12 @@ public class InvokeInStaticProcessor extends AbstractProcessor {
         elements.forEach(element -> {
             element.accept(new SimpleElementVisitor8<TypeElement,Object>(){
                 @Override
-                public TypeElement visitType(TypeElement e, Object o) {
-                    //静态代码块
+                public TypeElement visitExecutable(ExecutableElement e, Object o) {
                     AST ast = AST.newAST(AST.JLS8);
                     Initializer initializer = ast.newInitializer();
-                    return super.visitType(e, o);
+                    return super.visitExecutable(e, o);
                 }
+
             },null);
         });
 

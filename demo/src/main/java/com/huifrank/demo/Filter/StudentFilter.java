@@ -15,19 +15,19 @@ public class StudentFilter implements MemoryFilter<Student> {
 
         Predicate<Student> predicate = Objects::nonNull;
 
-        params.stream().forEach(param -> {
-            if("id".equals(param.getAttributeName())){
-                predicate.and( (Student st) -> param.getValue().equals(st.getId()));
-            }
-            if("classId".equals(param.getAttributeName())){
-                predicate.and( (Student st) -> param.getValue().equals(st.getClassId()));
-
-            }
-            if("name".equals(param.getAttributeName())){
-                predicate.and( (Student st) -> param.getValue().equals(st.getName()));
-            }
-
-        });
+//        params.stream().forEach(param -> {
+//            if("id".equals(param.getAttributeName())){
+//                predicate.and( (Student st) -> param.getValue().equals(st.getId()));
+//            }
+//            if("classId".equals(param.getAttributeName())){
+//                predicate.and( (Student st) -> param.getValue().equals(st.getClassId()));
+//
+//            }
+//            if("name".equals(param.getAttributeName())){
+//                predicate.and( (Student st) -> param.getValue().equals(st.getName()));
+//            }
+//
+//        });
 
         return list.stream().filter(predicate).collect(Collectors.toList());
     }

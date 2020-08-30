@@ -13,9 +13,10 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>com.huifrank</groupId>
-            <artifactId>annotation</artifactId>
+            <artifactId>core</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -24,9 +25,9 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.huifrank</groupId>
-            <artifactId>core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>com.google.auto.service</groupId>
+            <artifactId>auto-service</artifactId>
+            <version>1.0-rc6</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -34,23 +35,14 @@
             <optional>true</optional>
             <version>1.16.22</version>
         </dependency>
-        <dependency>
-            <groupId>com.huifrank</groupId>
-            <artifactId>executer</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.huifrank</groupId>
-            <artifactId>processor</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+
     </dependencies>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.5.1</version>
                 <executions>
                     <execution>
                         <id>default-compile</id>
@@ -61,9 +53,6 @@
                         <configuration>
                             <source>1.8</source>
                             <target>1.8</target>
-                            <annotationProcessors>
-                                <annotationProcessor>com.huifrank.processor.InvokeInStaticProcessor</annotationProcessor>
-                            </annotationProcessors>
                         </configuration>
                     </execution>
                 </executions>
