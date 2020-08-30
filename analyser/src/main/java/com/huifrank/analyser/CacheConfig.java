@@ -2,10 +2,7 @@ package com.huifrank.analyser;
 
 import com.huifrank.common.exception.CacheConfigException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class CacheConfig {
 
@@ -19,6 +16,9 @@ public abstract class CacheConfig {
     Map<String,Indexed> indexedMap = new HashMap<>();
 
     static {
+        ServiceLoader<ByInvoked> configs = ServiceLoader.load(ByInvoked.class);
+
+        configs.forEach(ByInvoked::doInvoke);
 
     }
 

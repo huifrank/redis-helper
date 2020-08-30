@@ -3,8 +3,6 @@ package com.huifrank.processor;
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.huifrank.common.util.invoker.InvokeInStatic;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.Initializer;
 
 
 import javax.annotation.processing.*;
@@ -60,8 +58,6 @@ public class InvokeInStaticProcessor extends AbstractProcessor {
             element.accept(new SimpleElementVisitor8<TypeElement,Object>(){
                 @Override
                 public TypeElement visitExecutable(ExecutableElement e, Object o) {
-                    AST ast = AST.newAST(AST.JLS8);
-                    Initializer initializer = ast.newInitializer();
                     return super.visitExecutable(e, o);
                 }
 
