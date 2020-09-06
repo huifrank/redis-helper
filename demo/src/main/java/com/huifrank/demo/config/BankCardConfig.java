@@ -1,14 +1,14 @@
 package com.huifrank.demo.config;
 
 
-import com.google.auto.service.AutoService;
-import com.huifrank.analyser.ByInvoked;
+import com.huifrank.common.util.invoker.SPIInvoked;
 import com.huifrank.analyser.CacheConfig;
+import com.huifrank.common.util.invoker.SPIService;
 import com.huifrank.demo.entity.BankCard;
 
 
-@AutoService(ByInvoked.class)
-public class BankCardConfig implements ByInvoked {
+@SPIService(SPIInvoked.class)
+public class BankCardConfig implements SPIInvoked {
 
 
     @Override
