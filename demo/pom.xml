@@ -61,11 +61,6 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service</artifactId>
-            <version>1.0-rc6</version>
-        </dependency>
-        <dependency>
             <groupId>com.huifrank</groupId>
             <artifactId>processor</artifactId>
             <version>0.0.1-SNAPSHOT</version>

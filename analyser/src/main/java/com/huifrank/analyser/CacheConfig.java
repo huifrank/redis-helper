@@ -1,7 +1,7 @@
 package com.huifrank.analyser;
 
 import com.huifrank.common.exception.CacheConfigException;
-import com.huifrank.common.util.invoker.ByInvoked;
+import com.huifrank.common.util.invoker.SPIInvoked;
 
 import java.util.*;
 
@@ -17,9 +17,9 @@ public abstract class CacheConfig {
     Map<String,Indexed> indexedMap = new HashMap<>();
 
     static {
-        ServiceLoader<ByInvoked> configs = ServiceLoader.load(ByInvoked.class);
+        ServiceLoader<SPIInvoked> configs = ServiceLoader.load(SPIInvoked.class);
 
-        configs.forEach(ByInvoked::doInvoke);
+        configs.forEach(SPIInvoked::doInvoke);
 
     }
 
