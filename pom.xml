@@ -9,6 +9,8 @@
         <module>executer</module>
         <module>common</module>
         <module>analyser</module>
+        <module>test</module>
+        <module>processor</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
